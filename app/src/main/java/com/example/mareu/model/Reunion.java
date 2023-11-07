@@ -1,6 +1,7 @@
 package com.example.mareu.model;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public class Reunion {
     /**
      * Date and Hour
      */
-    private Date date;
+    private Calendar date;
 
     /**
      * Duration in minute
@@ -50,7 +51,7 @@ public class Reunion {
      * @param venue
      * @param email_Person
      */
-    public Reunion(Long id, String name, Date date, long duration, Salle venue, List<String> email_Person) {
+    public Reunion(Long id, String name, Calendar date, long duration, Salle venue, List<String> email_Person) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -76,11 +77,11 @@ public class Reunion {
         this.name = name;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
