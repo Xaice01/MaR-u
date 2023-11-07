@@ -1,4 +1,4 @@
-package com.example.mareu.service;
+package com.example.mareu.model.service;
 
 import com.example.mareu.model.Reunion;
 
