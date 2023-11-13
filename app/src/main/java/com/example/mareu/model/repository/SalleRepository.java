@@ -33,7 +33,7 @@ public class SalleRepository {
     private static volatile SalleRepository instance;
 
     /**
-     * Injection de dépendance (pour avoir une seule instance SalleRepository)
+     * Singleton  (pour avoir une seule instance SalleRepository)
      *
      * @param service
      * @return instance_of_SalleRepository

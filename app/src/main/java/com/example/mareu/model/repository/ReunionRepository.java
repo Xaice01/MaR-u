@@ -34,7 +34,7 @@ public class ReunionRepository {
     private static volatile ReunionRepository instance;
 
     /**
-     * Injection de dépendance (pour avoir une seule instance ReunionRepository)
+     * Singleton (pour avoir une seule instance ReunionRepository)
      *
      * @param service
      * @return instance_of_ReunionRepository
