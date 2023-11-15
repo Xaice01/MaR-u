@@ -43,8 +43,15 @@ public class ReunionViewModel extends ViewModel {
 
 
     //----------------------------------------------------
-    //Inisialisation
+    //inisialization
     //----------------------------------------------------
+
+    /**
+     * Inisialization
+     * <p>
+     * setValue reunionRepository to MutableLiveData reunions
+     * setValue salleRepository to MutableLiveData salles
+     */
     public void init() {
         reunions.setValue(reunionRepository.getReunions());
         salles.setValue(salleRepository.getSalles());
@@ -53,18 +60,35 @@ public class ReunionViewModel extends ViewModel {
     //----------------------------------------------------
     //fonction
     //----------------------------------------------------
+
+    /**
+     * Create a Reunion
+     *
+     * @param reunion
+     */
     public void createReunion(Reunion reunion) {
         reunionRepository.createReunion(reunion);
     }
 
+    /**
+     * delete a Reunion
+     *
+     * @param reunion
+     */
     public void deleteReunion(Reunion reunion) {
         reunionRepository.deleteReunion(reunion);
     }
 
+    /**
+     * get list of Reunion
+     */
     public LiveData<List<Reunion>> getReunions() {
         return reunions;
     }
 
+    /**
+     * get list of Salle
+     */
     public LiveData<List<Salle>> getSalles() {
         return salles;
     }
