@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.example.mareu.R;
 import com.example.mareu.model.Reunion;
 
+import java.util.Objects;
+
 
 public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> {
 
+    //todo interface a faire entre listadater et le viewmodel
     private final Listener callback;
 
     public interface Listener {
-        void onClickDelete(Reunion reunion);
+        void onClickDelete(Reunion reunion, int position);
     }
 
     public ReunionListAdapter(Listener callback) {
@@ -55,7 +58,7 @@ public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> 
                 public boolean areItemsTheSame(
                         @NonNull Reunion oldReunion, @NonNull Reunion newReunion) {
                     // User properties may have changed if reloaded from the DB, but ID is fixed
-                    return oldReunion.getId() == newReunion.getId();
+                    return Objects.equals(oldReunion.getId(), newReunion.getId());
                 }
 
                 @Override

@@ -27,8 +27,8 @@ public class ReunionRepository {
         service.createReunion(reunion);
     }
 
-    public void deleteReunion(Reunion reunion) {
-        service.deleteReunion(reunion);
+    public boolean deleteReunion(Reunion reunion) {
+        return service.deleteReunion(reunion);
     }
 
     private static volatile ReunionRepository instance;
@@ -36,7 +36,7 @@ public class ReunionRepository {
     /**
      * Singleton (pour avoir une seule instance ReunionRepository)
      *
-     * @param service
+     * @param service (ReunionApiService)
      * @return instance_of_ReunionRepository
      */
     public static ReunionRepository getInstance(ReunionApiService service) {

@@ -16,15 +16,17 @@ import com.example.mareu.model.service.SalleApiService;
 import java.util.List;
 
 public class ReunionViewModel extends ViewModel {
+    //TODO viewModel Factory a faire
     //----------------------------------------------------
     //Repository
     //----------------------------------------------------
 
-    //injection de dépendance
+    //injection de dépendance Data:DummyReunionApiService()
     private ReunionApiService reunionApiService = new DummyReunionApiService();
     private ReunionRepository reunionRepository = new ReunionRepository(reunionApiService);
 
-    //injection de dépendance
+
+    //injection de dépendance Data:DummySalleApiService()
     private SalleApiService salleApiService = new DummySalleApiService();
     private SalleRepository salleRepository = new SalleRepository(salleApiService);
 
@@ -39,7 +41,9 @@ public class ReunionViewModel extends ViewModel {
     //Variable
     //----------------------------------------------------
 
+    private MutableLiveData<Integer> deletePosition = new MutableLiveData<>();
     private MutableLiveData<String> filter;
+
 
 
     //----------------------------------------------------
@@ -64,7 +68,7 @@ public class ReunionViewModel extends ViewModel {
     /**
      * Create a Reunion
      *
-     * @param reunion
+     * @param reunion reunion to create
      */
     public void createReunion(Reunion reunion) {
         reunionRepository.createReunion(reunion);
@@ -73,10 +77,16 @@ public class ReunionViewModel extends ViewModel {
     /**
      * delete a Reunion
      *
-     * @param reunion
+     * @param reunion  reunion to delete
+     * @param position position of item delete
      */
-    public void deleteReunion(Reunion reunion) {
-        reunionRepository.deleteReunion(reunion);
+    public void deleteReunion(Reunion reunion, int position) {
+        //if the reunion is delete
+        if (reunionRepository.deleteReunion(reunion)) {
+            deletePosition.setValue(position);
+        } else {
+            throw new IllegalArgumentException("reunion not found");
+        }
     }
 
     /**
@@ -91,6 +101,13 @@ public class ReunionViewModel extends ViewModel {
      */
     public LiveData<List<Salle>> getSalles() {
         return salles;
+    }
+
+    /**
+     * get position of item to delete
+     */
+    public LiveData<Integer> getDeletePosition() {
+        return deletePosition;
     }
 
 
