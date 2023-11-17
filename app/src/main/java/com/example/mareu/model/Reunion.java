@@ -115,11 +115,11 @@ public class Reunion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reunion reunion = (Reunion) o;
-        return Objects.equals(id, reunion.id);
+        return duration == reunion.duration && id.equals(reunion.id) && name.equals(reunion.name) && date.equals(reunion.date) && venue.equals(reunion.venue) && email_Person.equals(reunion.email_Person);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, date, duration, venue, email_Person);
     }
 }

@@ -16,15 +16,17 @@ import com.example.mareu.model.service.SalleApiService;
 import java.util.List;
 
 public class ReunionViewModel extends ViewModel {
+    //TODO viewModel Factory a faire
     //----------------------------------------------------
     //Repository
     //----------------------------------------------------
 
-    //injection de dépendance
+    //injection de dépendance Data:DummyReunionApiService()
     private ReunionApiService reunionApiService = new DummyReunionApiService();
     private ReunionRepository reunionRepository = new ReunionRepository(reunionApiService);
 
-    //injection de dépendance
+
+    //injection de dépendance Data:DummySalleApiService()
     private SalleApiService salleApiService = new DummySalleApiService();
     private SalleRepository salleRepository = new SalleRepository(salleApiService);
 
@@ -39,12 +41,21 @@ public class ReunionViewModel extends ViewModel {
     //Variable
     //----------------------------------------------------
 
+    private MutableLiveData<Integer> deletePosition = new MutableLiveData<>();
     private MutableLiveData<String> filter;
 
 
+
     //----------------------------------------------------
-    //Inisialisation
+    //inisialization
     //----------------------------------------------------
+
+    /**
+     * Inisialization
+     * <p>
+     * setValue reunionRepository to MutableLiveData reunions
+     * setValue salleRepository to MutableLiveData salles
+     */
     public void init() {
         reunions.setValue(reunionRepository.getReunions());
         salles.setValue(salleRepository.getSalles());
@@ -53,20 +64,50 @@ public class ReunionViewModel extends ViewModel {
     //----------------------------------------------------
     //fonction
     //----------------------------------------------------
+
+    /**
+     * Create a Reunion
+     *
+     * @param reunion reunion to create
+     */
     public void createReunion(Reunion reunion) {
         reunionRepository.createReunion(reunion);
     }
 
-    public void deleteReunion(Reunion reunion) {
-        reunionRepository.deleteReunion(reunion);
+    /**
+     * delete a Reunion
+     *
+     * @param reunion  reunion to delete
+     * @param position position of item delete
+     */
+    public void deleteReunion(Reunion reunion, int position) {
+        //if the reunion is delete
+        if (reunionRepository.deleteReunion(reunion)) {
+            deletePosition.setValue(position);
+        } else {
+            throw new IllegalArgumentException("reunion not found");
+        }
     }
 
+    /**
+     * get list of Reunion
+     */
     public LiveData<List<Reunion>> getReunions() {
         return reunions;
     }
 
+    /**
+     * get list of Salle
+     */
     public LiveData<List<Salle>> getSalles() {
         return salles;
+    }
+
+    /**
+     * get position of item to delete
+     */
+    public LiveData<Integer> getDeletePosition() {
+        return deletePosition;
     }
 
 
