@@ -6,12 +6,16 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.example.mareu.databinding.ActivityMainBinding;
 import com.example.mareu.model.Reunion;
+import com.example.mareu.view.CreateViewActivity;
 import com.example.mareu.view.ReunionListAdapter;
 import com.example.mareu.viewmodel.ReunionViewModel;
 
@@ -48,11 +52,24 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
         recyclerView.addItemDecoration(new DividerItemDecoration(getBaseContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(listAdapter);
 
+        //navigate to CreateViewActivity on Click to floatingActionButtonAddReunion
+        binding.floatingActionButtonAddReunion.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), CreateViewActivity.class);
+            startActivity(intent);
+        });
+
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public void onClickDelete(Reunion reunion, int position) {
         reunionViewModel.deleteReunion(reunion, position);
     }
+
 }

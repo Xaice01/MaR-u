@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/padding_NestedScrolView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_CreateReunion"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.CreateViewActivity">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_Nom_Reunion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="24dp"
+            android:hint="@string/Name_of_reunion"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInput_Nom_Reunion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_Date_Et_Heure"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/date_and_hour"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Nom_Reunion"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Nom_Reunion"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Nom_Reunion">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInput_Date_Et_Heure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:drawableEnd="@drawable/baseline_calendar_today_24"
+                android:focusable="false"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_Duree"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/duree"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Date_Et_Heure"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Date_Et_Heure"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Date_Et_Heure">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInput_Duree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:drawableEnd="@drawable/baseline_access_time_24"
+                android:focusable="false"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_Salle_Reunion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/salle_of_reunion"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Duree"
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Duree"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Duree">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/autoComplete_Salle_Reunion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dropDownWidth="match_parent"
+                android:focusable="false"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_Email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/Participant"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Salle_Reunion"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Salle_Reunion"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Salle_Reunion">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInput_Email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/baseline_send_24"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/displayTextView_EmailList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Email"
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Email"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Email" />
+
+        <Button
+            android:id="@+id/button_CreateReunion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/Create_Reunion"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Email"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Email"
+            app:layout_constraintTop_toBottomOf="@+id/displayTextView_EmailList" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

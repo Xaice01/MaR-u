@@ -26,7 +26,7 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Reunion reunion, ReunionListAdapter.Listener callback) {
-        //TODO a mettre dans le viewmodel( la logique) (boucle for avec toute le adresse mail)
+        //TODO a mettre dans le viewmodel( la logique) (boucle for avec toutes les adresse mail)
         textViewNameHeureSalle.setText(reunion.getName() + " - " + reunion.getDate().HOUR_OF_DAY + "H" + reunion.getDate().MINUTE + " - " + reunion.getVenue().getLieu());
         String textEmail = reunion.getEmail_Person().get(0);
         if (reunion.getEmail_Person().size() > 1) {

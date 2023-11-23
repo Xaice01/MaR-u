@@ -2,6 +2,23 @@
     <string name="app_name">MaRéu</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Name_of_reunion">Nom de la reunion</string>
+    <string name="date_and_hour">date et heures</string>
+    <string name="duree">Durée</string>
+    <string name="salle_of_reunion">Salle de reunion</string>
+    <string name="Participant">Participant</string>
+    <string name="Create_Reunion">Créer la Reunion</string>
+    <string name="Add_Reunion">Ajoute une Réunion</string>
+
+    <!-- error to field text (createReunion)-->
+    <string name="Error_Name_of_Reunion">entrez un nom de reunion</string>
+
+    <!-- item menu (menu.XML)-->
+    <string name="Filter_by_date">Filtrer par date</string>
+    <string name="Filter_by_Venue">Filtrer par lieu</string>
+    <string name="Filter_resert">Resert du filtre </string>
+
+
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus

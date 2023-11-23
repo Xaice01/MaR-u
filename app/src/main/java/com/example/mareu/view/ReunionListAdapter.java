@@ -22,6 +22,11 @@ public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> 
     //todo interface a faire entre listadater et le viewmodel
     private final Listener callback;
 
+    /**
+     * interface Listener
+     * <p>
+     * for the delete reunion
+     */
     public interface Listener {
         void onClickDelete(Reunion reunion, int position);
     }
