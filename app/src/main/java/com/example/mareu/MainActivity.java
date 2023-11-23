@@ -1,5 +1,6 @@
 package com.example.mareu;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.mareu.databinding.ActivityMainBinding;
@@ -60,6 +62,12 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
 
     }
 
+    /**
+     * for the create of filter menu
+     *
+     * @param menu The options menu in which you place your items.
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -67,6 +75,40 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * for the item selected
+     *
+     * @param item The menu item that was selected.
+     * @return
+     */
+    // @Override
+    // public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    //     switch (item.getItemId()){
+    //     case R.id.filtre_date:
+    //         datePickerDialog();
+    //         return true;
+    //     case R.id.filtre_lieu:
+//
+    //         return true;
+    //     case R.id.filtre_resert:
+//
+    //         return true;
+    //     default:
+    //         return super.onOptionsItemSelected(item);
+//
+    //     }
+    //     return super.onOptionsItemSelected(item);
+    // }
+    private void datePickerDialog() {
+
+    }
+
+    /**
+     * for the delete Reunion
+     *
+     * @param reunion  reunion to delete
+     * @param position position of this reunion
+     */
     @Override
     public void onClickDelete(Reunion reunion, int position) {
         reunionViewModel.deleteReunion(reunion, position);

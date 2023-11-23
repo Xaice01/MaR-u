@@ -163,6 +163,16 @@ public class ReunionViewModel extends ViewModel {
         return reunions;
     }
 
+    public LiveData<List<Reunion>> getReunionsByDate(Calendar calendar) {
+        //TODO methode a faire
+        return reunions;
+    }
+
+    public LiveData<List<Reunion>> getReunionsByLieu(Salle salle) {
+        //TODO methode a faire
+        return reunions;
+    }
+
     /**
      * get list of Salle
      */

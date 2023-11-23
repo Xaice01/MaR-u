@@ -73,6 +73,13 @@ public class CreateViewActivity extends AppCompatActivity {
         setContentView(view);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        listSalle.add("Salle1");
+        listSalle.add("Salle2");
+        adapterItems = new ArrayAdapter<String>(this, R.layout.item_list_salle, listSalle);
+        binding.autoCompleteSalleReunion.setThreshold(2);
+        binding.autoCompleteSalleReunion.setAdapter(adapterItems);
+        binding.autoCompleteSalleReunion.setText("Salle de reunion", false);
+
         //configure reunionViewModel
         reunionViewModel = new ViewModelProvider(this).get(ReunionViewModel.class);
         reunionViewModel.init();
