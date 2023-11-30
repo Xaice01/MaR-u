@@ -1,16 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/filtre_date"
+        android:id="@+id/menu_filtre_date"
         android:title="@string/Filter_by_date"
         app:showAsAction="never" />
     <item
-        android:id="@+id/filtre_lieu"
+        android:id="@+id/menu_filtre_lieu"
         android:title="@string/Filter_by_Venue"
-        app:showAsAction="never" />
+        app:showAsAction="never">
+        <menu>
+
+        </menu>
+    </item>
     <item
-        android:id="@+id/filtre_resert"
+        android:id="@+id/menu_filtre_resert"
         android:title="@string/Filter_resert"
         app:showAsAction="never" />
 

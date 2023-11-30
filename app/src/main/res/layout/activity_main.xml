@@ -11,18 +11,20 @@
         android:id="@+id/list_reunion_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/item_reunion" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton_AddReunion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/marging_floating_Buttom"
-        android:layout_marginBottom="@dimen/marging_floating_Buttom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:contentDescription="@string/Add_Reunion"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/list_reunion_recyclerview"
-        app:layout_constraintStart_toStartOf="@+id/list_reunion_recyclerview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/list_reunion_recyclerview"
         app:srcCompat="@drawable/baseline_add_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,8 +3,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Name_of_reunion">Nom de la reunion</string>
-    <string name="date_and_hour">date et heures</string>
-    <string name="duree">Durée</string>
+    <string name="date">Date</string>
+    <string name="duree_start">Début</string>
+    <string name="duree_end">Fin</string>
     <string name="salle_of_reunion">Salle de reunion</string>
     <string name="Participant">Participant</string>
     <string name="Create_Reunion">Créer la Reunion</string>

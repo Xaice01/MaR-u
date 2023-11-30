@@ -2,8 +2,10 @@ package com.example.mareu.model.repository;
 
 
 import com.example.mareu.model.Reunion;
+import com.example.mareu.model.Salle;
 import com.example.mareu.model.service.ReunionApiService;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -16,7 +18,7 @@ public class ReunionRepository {
 
 
     public ReunionRepository(ReunionApiService service) {
-        this.service = service;
+        ReunionRepository.service = service;
     }
 
     public List<Reunion> getReunions() {
@@ -30,6 +32,16 @@ public class ReunionRepository {
     public boolean deleteReunion(Reunion reunion) {
         return service.deleteReunion(reunion);
     }
+
+
+    public List<Reunion> getReunionFilterByDate(Calendar calendar) {
+        return service.getReunionFilterByDate(calendar);
+    }
+
+    public List<Reunion> getReunionFilterByVenue(Salle salle) {
+        return service.getReunionFilterByVenue(salle);
+    }
+
 
     private static volatile ReunionRepository instance;
 

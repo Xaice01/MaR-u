@@ -1,7 +1,10 @@
 package com.example.mareu.model.service;
 
 import com.example.mareu.model.Reunion;
+import com.example.mareu.model.Salle;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -33,5 +36,33 @@ public class DummyReunionApiService implements ReunionApiService {
     @Override
     public boolean deleteReunion(Reunion reunion) {
         return reunions.remove(reunion);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Reunion> getReunionFilterByDate(Calendar calendar) {
+        List<Reunion> listFilterByDate = new ArrayList<>();
+        for (Reunion reunionToCompare : reunions) {
+            if (reunionToCompare.getDate().get(Calendar.YEAR) == calendar.get(Calendar.YEAR) & reunionToCompare.getDate().get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR)) {
+                listFilterByDate.add(reunionToCompare);
+            }
+        }
+        return listFilterByDate;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Reunion> getReunionFilterByVenue(Salle salle) {
+        List<Reunion> listFilterByVenue = new ArrayList<>();
+        for (Reunion reunionToCompare : reunions) {
+            if (reunionToCompare.getVenue().equals(salle)) {
+                listFilterByVenue.add(reunionToCompare);
+            }
+        }
+        return listFilterByVenue;
     }
 }

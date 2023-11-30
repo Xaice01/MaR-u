@@ -15,6 +15,7 @@ import com.example.mareu.model.service.SalleApiService;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,13 +26,13 @@ public class ReunionViewModel extends ViewModel {
     //----------------------------------------------------
 
     //injection de dépendance Data:DummyReunionApiService()
-    private ReunionApiService reunionApiService = new DummyReunionApiService();
+    private final ReunionApiService reunionApiService = new DummyReunionApiService();
     private ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
 
 
     //injection de dépendance Data:DummySalleApiService()
-    private SalleApiService salleApiService = new DummySalleApiService();
-    private SalleRepository salleRepository = new SalleRepository(salleApiService);
+    private final SalleApiService salleApiService = new DummySalleApiService();
+    private SalleRepository salleRepository = SalleRepository.getInstance(salleApiService);
 
     //----------------------------------------------------
     //Data
@@ -45,8 +46,10 @@ public class ReunionViewModel extends ViewModel {
     //----------------------------------------------------
 
     private MutableLiveData<Integer> deletePosition = new MutableLiveData<>();
-    private MutableLiveData<String> filter;
+    private String filter = "default";
 
+    private Salle salleFilter;
+    private Calendar calendarFilter;
 
 
     //----------------------------------------------------
@@ -56,11 +59,25 @@ public class ReunionViewModel extends ViewModel {
     /**
      * Inisialization
      * <p>
-     * setValue reunionRepository to MutableLiveData reunions
+     * setValue reunionRepository to MutableLiveData reunions or filter with date or filter with Salle
+     * <p>
      * setValue salleRepository to MutableLiveData salles
      */
     public void init() {
-        reunions.setValue(reunionRepository.getReunions());
+        switch (filter) {
+            case "default":
+                reunions.setValue(reunionRepository.getReunions());
+                break;
+            case "date":
+                reunions.setValue(reunionRepository.getReunionFilterByDate(calendarFilter));
+                break;
+            case "lieu":
+                reunions.setValue(reunionRepository.getReunionFilterByVenue(salleFilter));
+                break;
+            default:
+                reunions.setValue(reunionRepository.getReunions());
+        }
+
         salles.setValue(salleRepository.getSalles());
     }
 
@@ -116,15 +133,19 @@ public class ReunionViewModel extends ViewModel {
             listSalle.add(salle.getLieu());
         }
 
-        List<Reunion> reunion_To_Compare = reunions.getValue();
+        Calendar calendarEnd = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+
+
+        calendarEnd.add(Calendar.MINUTE, dureeToMinute);
+        List<Reunion> reunion_To_Compare = new ArrayList<>(reunions.getValue());
         for (Reunion reunion : reunion_To_Compare) {
-            Calendar calendarEnd = reunion.getDate();
-            calendarEnd.add(Calendar.MINUTE, dureeToMinute);
-            Calendar endOfReunion = reunion.getDate();
+            Calendar endOfReunion = new GregorianCalendar(reunion.getDate().get(Calendar.YEAR), reunion.getDate().get(Calendar.MONTH), reunion.getDate().get(Calendar.DAY_OF_MONTH), reunion.getDate().get(Calendar.HOUR_OF_DAY), reunion.getDate().get(Calendar.MINUTE), reunion.getDate().get(Calendar.SECOND));
+
+
             endOfReunion.add(Calendar.MINUTE, (int) reunion.getDuration());
 
             //calcul if a reunion is created on a other Reunion
-            if ((reunion.getDate().before(calendar) & endOfReunion.before(calendar)) || reunion.getDate().equals(calendar) || (reunion.getDate().before(calendarEnd) & endOfReunion.before(calendarEnd))) {
+            if ((reunion.getDate().after(calendar) & reunion.getDate().before(calendarEnd)) || reunion.getDate().equals(calendar) || (reunion.getDate().before(calendar) & endOfReunion.after(calendar))) {
                 if (listSalle.contains(reunion.getVenue().getLieu()))
                     listSalle.remove(reunion.getVenue().getLieu());
             }
@@ -150,7 +171,6 @@ public class ReunionViewModel extends ViewModel {
             if (Objects.equals(salle.getLieu(), nameOfSalle)) {
                 salleToReturn = salle;
             }
-
         }
         return salleToReturn;
     }
@@ -160,16 +180,23 @@ public class ReunionViewModel extends ViewModel {
      * get list of Reunion
      */
     public LiveData<List<Reunion>> getReunions() {
+        filter = "default";
+        init();
         return reunions;
     }
 
     public LiveData<List<Reunion>> getReunionsByDate(Calendar calendar) {
         //TODO methode a faire
+        calendarFilter = calendar;
+        filter = "date";
+        init();
         return reunions;
     }
 
     public LiveData<List<Reunion>> getReunionsByLieu(Salle salle) {
-        //TODO methode a faire
+        salleFilter = salle;
+        filter = "lieu";
+        init();
         return reunions;
     }
 
@@ -187,5 +214,21 @@ public class ReunionViewModel extends ViewModel {
         return deletePosition;
     }
 
-
+    /**
+     * get list of Email in one string
+     *
+     * @param reunion reunion to get a list of email
+     * @return list of email in one string
+     */
+    public String listOfEmailInString(Reunion reunion) {
+        String listofEmail = null;
+        for (String Email : reunion.getEmail_Person()) {
+            if (listofEmail == null) {
+                listofEmail = Email;
+            } else {
+                listofEmail = listofEmail + ", " + Email;
+            }
+        }
+        return listofEmail;
+    }
 }

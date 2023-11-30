@@ -34,18 +34,18 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/outlinedTextField_Date_Et_Heure"
+            android:id="@+id/outlinedTextField_Date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:hint="@string/date_and_hour"
+            android:layout_marginTop="@dimen/margin_between"
+            android:hint="@string/date"
             app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Nom_Reunion"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Nom_Reunion"
             app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Nom_Reunion">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInput_Date_Et_Heure"
+                android:id="@+id/textInput_Date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -56,18 +56,41 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/outlinedTextField_Duree"
+            android:id="@+id/outlinedTextField_Duree_start"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:hint="@string/duree"
-            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Date_Et_Heure"
+            android:layout_marginTop="@dimen/margin_between"
+            android:layout_marginEnd="@dimen/margin_Duree"
+            android:hint="@string/duree_start"
+            app:layout_constraintEnd_toStartOf="@+id/outlinedTextField_Duree_end"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Date_Et_Heure"
-            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Date_Et_Heure">
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Date"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Date">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/textInput_Duree"
+                android:id="@+id/textInput_Duree_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:drawableEnd="@drawable/baseline_access_time_24"
+                android:focusable="false"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_Duree_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_Duree"
+            android:layout_marginTop="@dimen/margin_between"
+            android:hint="@string/duree_end"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Date"
+            app:layout_constraintStart_toEndOf="@+id/outlinedTextField_Duree_start"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInput_Duree_end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -82,17 +105,19 @@
             android:id="@+id/outlinedTextField_Salle_Reunion"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/margin_between"
             android:hint="@string/salle_of_reunion"
-            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Duree"
-            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Duree"
-            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Duree">
+            app:errorEnabled="false"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Date"
+            app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Date"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Duree_start"
+            app:endIconMode="dropdown_menu">
 
             <AutoCompleteTextView
                 android:id="@+id/autoComplete_Salle_Reunion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -101,7 +126,7 @@
             android:id="@+id/outlinedTextField_Email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/margin_between"
             android:hint="@string/Participant"
             app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Salle_Reunion"
             app:layout_constraintHorizontal_bias="0.0"

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.example.mareu.R;
 import com.example.mareu.model.Reunion;
+import com.example.mareu.viewmodel.ReunionViewModel;
 
 import java.util.Objects;
 
@@ -33,16 +34,11 @@ public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> 
 
     public ReunionListAdapter(Listener callback) {
         super(DIFF_CALLBACK);
-        //TODO a supprimer
-        Log.d("Xavier", "entrer dans ReunionListAdapter");
         this.callback = callback;
     }
 
     @Override
     public ReunionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //TODO a retirer
-        Log.d("Xavier", "entrer dans onCreateViewHolder");
-
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_reunion, parent, false);

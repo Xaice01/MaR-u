@@ -8,7 +8,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,13 +33,12 @@ public class CreateViewActivity extends AppCompatActivity {
 
     //salle de reunion
     ArrayAdapter<String> adapterItems;
-    private int duration = -1;
+    private int duration = 20;
     List<String> listSalle = new ArrayList<>();
-    private String selectionSalle = "Mario";
 
 
     //Email
-    private ArrayList<String> email = new ArrayList<>();
+    private final ArrayList<String> email = new ArrayList<>();
 
 
     //timepicker
@@ -56,11 +54,10 @@ public class CreateViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         // Gérer les clics sur les éléments de la barre d'action/toolbar
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                //for back to main activity
-                getOnBackPressedDispatcher().onBackPressed();
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            //for back to main activity
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -73,46 +70,34 @@ public class CreateViewActivity extends AppCompatActivity {
         setContentView(view);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        listSalle.add("Salle1");
-        listSalle.add("Salle2");
-        adapterItems = new ArrayAdapter<String>(this, R.layout.item_list_salle, listSalle);
-        binding.autoCompleteSalleReunion.setThreshold(2);
-        binding.autoCompleteSalleReunion.setAdapter(adapterItems);
-        binding.autoCompleteSalleReunion.setText("Salle de reunion", false);
 
         //configure reunionViewModel
         reunionViewModel = new ViewModelProvider(this).get(ReunionViewModel.class);
         reunionViewModel.init();
 
-        //TODO a supprimer
-        //test
-        Calendar calendar = (Calendar) new GregorianCalendar(2018, 6, 25, 15, 40, 0);
-        //listSalle = getSalle(calendar, 15);
-        listSalle.add("pas de salle");
-        listSalle.add("autre chose");
-        duration = 15;
-        adapterItems = new ArrayAdapter<>(this, R.layout.item_list_salle, listSalle);
-        binding.autoCompleteSalleReunion.setAdapter(adapterItems);
 
-
-        binding.textInputDateEtHeure.setOnClickListener(v -> {
-            //recupère la date et heure
-            timepicker(false);
+        binding.textInputDate.setOnClickListener(v -> {
+            //get Date
             datepicker();
         });
 
-        binding.textInputDuree.setOnClickListener(v -> {
-            timepicker(true);
-            //Calendar calendar = (Calendar) new GregorianCalendar(lastSelectedYear, lastSelectedMonth, lastSelectedDay, lastSelectedHour, lastSelectedMinute, 0);
-            //listSalle.set(getSalle(calendar, duration));
-            //adapterItems = new ArrayAdapter<String>(this,R.layout.item_list_salle,listSalle);
-            //binding.autoCompleteSalleReunion.setAdapter(adapterItems);
+        binding.textInputDureeStart.setOnClickListener(v -> {
+            //get hour start
+            timepicker(false);
         });
 
+        binding.textInputDureeEnd.setOnClickListener(v -> {
+            //get hour finish
+            timepicker(true);
+            //todo regarder la durée
+            //initializeSalleReunion();
+        });
+
+        binding.autoCompleteSalleReunion.setOnClickListener(v -> initializeSalleReunion());
         binding.autoCompleteSalleReunion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //selectionSalle = parent.getItemAtPosition(position).toString();
+
             }
 
             @Override
@@ -121,39 +106,41 @@ public class CreateViewActivity extends AppCompatActivity {
             }
         });
 
-        binding.textInputEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!String.valueOf(binding.textInputEmail.getText()).isEmpty()) {
-                    email.add(String.valueOf(binding.textInputEmail.getText()));
-                    writerEmail(email);
-                    binding.textInputEmail.setText("");
-                }
+        binding.textInputEmail.setOnClickListener(v -> {
+            if (!String.valueOf(binding.textInputEmail.getText()).isEmpty()) {
+                email.add(String.valueOf(binding.textInputEmail.getText()));
+                writerEmail(email);
+                binding.textInputEmail.setText("");
             }
         });
 
 
-        binding.buttonCreateReunion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO enlever le commentaire et mettre la fonction dans un if
-                //checkIfTextIsEmpty();
-
+        binding.buttonCreateReunion.setOnClickListener(v -> {
+            if (!checkIfTextIsEmpty()) {
 
                 Calendar calendar = (Calendar) new GregorianCalendar(lastSelectedYear, lastSelectedMonth, lastSelectedDay, lastSelectedHour, lastSelectedMinute, 0);
 
-                Reunion reunion = new Reunion(reunionViewModel.getIdForNewReunion(), String.valueOf(binding.textInputNomReunion.getText()), calendar, (long) duration, reunionViewModel.getSalleWithString(selectionSalle), email);
+                Reunion reunion = new Reunion(reunionViewModel.getIdForNewReunion(), String.valueOf(binding.textInputNomReunion.getText()), calendar, (long) duration, reunionViewModel.getSalleWithString(String.valueOf(binding.autoCompleteSalleReunion.getText())), email);
 
                 reunionViewModel.createReunion(reunion);
 
-
                 Toast.makeText(getApplicationContext(), "created Reunion", Toast.LENGTH_SHORT).show();
 
+                /*
+                 * back to the mainActivity
+                 */
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(intent);
             }
         });
 
+    }
+
+    private void initializeSalleReunion() {
+        Calendar calendar = (Calendar) new GregorianCalendar(lastSelectedYear, lastSelectedMonth, lastSelectedDay, lastSelectedHour, lastSelectedMinute, 0);
+        listSalle.addAll(getSalle(calendar, duration));
+        adapterItems = new ArrayAdapter<>(this, R.layout.item_list_salle, listSalle);
+        binding.autoCompleteSalleReunion.setAdapter(adapterItems);
     }
 
     private void writerEmail(List<String> listEmail) {
@@ -169,32 +156,37 @@ public class CreateViewActivity extends AppCompatActivity {
 
     //Check if one of textfield is empty
     private boolean checkIfTextIsEmpty() {
-        boolean check = true;
+        boolean check = false;
         String reunion = binding.textInputNomReunion.getText().toString();
-        String dateAndHeure = binding.textInputDateEtHeure.getText().toString();
-        String duree = binding.textInputDuree.getText().toString();
+        String date = binding.textInputDate.getText().toString();
+        String dureeStart = binding.textInputDureeStart.getText().toString();
+        String dureeEnd = binding.textInputDureeEnd.getText().toString();
         String salleDeReunion = binding.autoCompleteSalleReunion.getText().toString();
         String participant = binding.displayTextViewEmailList.getText().toString();
 
         if (reunion.isEmpty()) {
             binding.outlinedTextFieldNomReunion.setError("entrez un nom de reunion");
-            check = false;
+            check = true;
         } else binding.outlinedTextFieldNomReunion.setError("");
-        if (dateAndHeure.isEmpty()) {
-            binding.outlinedTextFieldDateEtHeure.setError("entrez une date");
-            check = false;
-        } else binding.outlinedTextFieldDateEtHeure.setError("");
-        if (duree.isEmpty()) {
-            binding.outlinedTextFieldDuree.setError("entrez une duree");
-            check = false;
-        } else binding.outlinedTextFieldDuree.setError("");
+        if (date.isEmpty()) {
+            binding.outlinedTextFieldDate.setError("entrez une date");
+            check = true;
+        } else binding.outlinedTextFieldDate.setError("");
+        if (dureeStart.isEmpty()) {
+            binding.outlinedTextFieldDureeStart.setError("entrez une heure");
+            check = true;
+        } else binding.outlinedTextFieldDureeStart.setError("");
+        if (dureeEnd.isEmpty()) {
+            binding.outlinedTextFieldDureeEnd.setError("entrez une heure");
+            check = true;
+        } else binding.outlinedTextFieldDureeEnd.setError("");
         if (salleDeReunion.isEmpty()) {
             binding.outlinedTextFieldSalleReunion.setError("selectionnez une salle");
-            check = false;
+            check = true;
         } else binding.outlinedTextFieldSalleReunion.setError("");
         if (participant.isEmpty()) {
             binding.outlinedTextFieldEmail.setError("entrez un Participant");
-            check = false;
+            check = true;
         } else binding.outlinedTextFieldEmail.setError("");
 
         return check;
@@ -209,7 +201,7 @@ public class CreateViewActivity extends AppCompatActivity {
 
         // Date Set Listener.
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
-            binding.textInputDateEtHeure.setText(dayOfMonth + "/" + month + "/" + year);
+            binding.textInputDate.setText(dayOfMonth + "/" + month + "/" + year);
             lastSelectedYear = year;
             lastSelectedMonth = month;
             lastSelectedDay = dayOfMonth;
@@ -224,22 +216,21 @@ public class CreateViewActivity extends AppCompatActivity {
 
     }
 
-    private void timepicker(Boolean duree) {
+    private void timepicker(Boolean dureeEnd) {
 
         // Get Current Time
         final Calendar c = Calendar.getInstance();
-        this.lastSelectedHour = c.get(Calendar.HOUR_OF_DAY);
-        this.lastSelectedMinute = c.get(Calendar.MINUTE);
+        int curentHour = c.get(Calendar.HOUR_OF_DAY);
+        int curentMinute = c.get(Calendar.MINUTE);
 
 
         // Time Set Listener.
         TimePickerDialog.OnTimeSetListener timeSetListener = (view, hourOfDay, minute) -> {
-            if (duree) {
-                binding.textInputDuree.setText(hourOfDay + "H" + minute);
-                duration = (hourOfDay * 60) + minute;
+            if (dureeEnd) {
+                binding.textInputDureeEnd.setText(hourOfDay + "H" + minute);
+                duration = (hourOfDay - lastSelectedHour) * 60 + (minute - lastSelectedMinute);
             } else {
-                Editable temporarytext = binding.textInputDateEtHeure.getText();
-                binding.textInputDateEtHeure.setText(temporarytext + "  " + hourOfDay + "H" + minute);
+                binding.textInputDureeStart.setText(hourOfDay + "H" + minute);
                 lastSelectedHour = hourOfDay;
                 lastSelectedMinute = minute;
             }
@@ -247,7 +238,7 @@ public class CreateViewActivity extends AppCompatActivity {
 
         // Create TimePickerDialog:
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                timeSetListener, lastSelectedHour, lastSelectedMinute, true);
+                timeSetListener, curentHour, curentMinute, true);
 
         // Show
         timePickerDialog.show();
