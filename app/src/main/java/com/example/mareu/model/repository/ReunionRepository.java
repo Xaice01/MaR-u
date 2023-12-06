@@ -17,7 +17,7 @@ public class ReunionRepository {
     private static ReunionApiService service;
 
 
-    public ReunionRepository(ReunionApiService service) {
+    private ReunionRepository(ReunionApiService service) {
         ReunionRepository.service = service;
     }
 
@@ -34,10 +34,16 @@ public class ReunionRepository {
     }
 
 
+    /**
+     * for the filter by Date
+     */
     public List<Reunion> getReunionFilterByDate(Calendar calendar) {
         return service.getReunionFilterByDate(calendar);
     }
 
+    /**
+     * for the filter by Salle
+     */
     public List<Reunion> getReunionFilterByVenue(Salle salle) {
         return service.getReunionFilterByVenue(salle);
     }

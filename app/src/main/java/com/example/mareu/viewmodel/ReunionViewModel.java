@@ -1,9 +1,17 @@
 package com.example.mareu.viewmodel;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.view.MenuItem;
+import android.view.SubMenu;
+import android.widget.ArrayAdapter;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.mareu.R;
 import com.example.mareu.model.Reunion;
 import com.example.mareu.model.Salle;
 import com.example.mareu.model.repository.ReunionRepository;
@@ -46,7 +54,11 @@ public class ReunionViewModel extends ViewModel {
     //----------------------------------------------------
 
     private MutableLiveData<Integer> deletePosition = new MutableLiveData<>();
-    private String filter = "default";
+
+    public enum filter {reset, date, lieu}
+
+
+    private filter filterMain = filter.reset;
 
     private Salle salleFilter;
     private Calendar calendarFilter;
@@ -64,21 +76,23 @@ public class ReunionViewModel extends ViewModel {
      * setValue salleRepository to MutableLiveData salles
      */
     public void init() {
-        switch (filter) {
-            case "default":
+        switch (filterMain) {
+            case reset:
                 reunions.setValue(reunionRepository.getReunions());
                 break;
-            case "date":
+            case date:
                 reunions.setValue(reunionRepository.getReunionFilterByDate(calendarFilter));
                 break;
-            case "lieu":
+            case lieu:
                 reunions.setValue(reunionRepository.getReunionFilterByVenue(salleFilter));
                 break;
+
             default:
                 reunions.setValue(reunionRepository.getReunions());
         }
 
         salles.setValue(salleRepository.getSalles());
+        listOfParticipant.setValue(new ArrayList<>());
     }
 
     //----------------------------------------------------
@@ -109,12 +123,15 @@ public class ReunionViewModel extends ViewModel {
      * delete a Reunion
      *
      * @param reunion  reunion to delete
-     * @param position position of item delete
      */
     public void deleteReunion(Reunion reunion, int position) {
         //if the reunion is delete
         if (reunionRepository.deleteReunion(reunion)) {
-            deletePosition.setValue(position);
+            if (filterMain == filter.reset) {
+                deletePosition.setValue(position);
+            } else {
+                init();
+            }
         } else {
             throw new IllegalArgumentException("reunion not found");
         }
@@ -180,22 +197,21 @@ public class ReunionViewModel extends ViewModel {
      * get list of Reunion
      */
     public LiveData<List<Reunion>> getReunions() {
-        filter = "default";
+        filterMain = filter.reset;
         init();
         return reunions;
     }
 
     public LiveData<List<Reunion>> getReunionsByDate(Calendar calendar) {
-        //TODO methode a faire
         calendarFilter = calendar;
-        filter = "date";
+        filterMain = filter.date;
         init();
         return reunions;
     }
 
     public LiveData<List<Reunion>> getReunionsByLieu(Salle salle) {
         salleFilter = salle;
-        filter = "lieu";
+        filterMain = filter.lieu;
         init();
         return reunions;
     }
@@ -230,5 +246,200 @@ public class ReunionViewModel extends ViewModel {
             }
         }
         return listofEmail;
+    }
+
+    public void selectedMenu(MenuItem item, Context context) {
+
+        //filter by date
+        if (item.getItemId() == R.id.menu_filtre_date) {
+            ListChoiceDatePicker choice = ListChoiceDatePicker.filter;
+            datePicker(context, choice);
+            return;
+        }
+        //Created submenu with all of Salle
+        if (item.getItemId() == R.id.menu_filtre_lieu) {
+            createSubMenu(item);
+            return;
+        }
+        //Resert filter
+        if (item.getItemId() == R.id.menu_filtre_resert) {
+            getReunions();
+            return;
+        }
+        //Submenu With all of Salle filter by Salle
+        List<Salle> listSalle = getSalles().getValue();
+        for (int i = 0; listSalle.size() > i; i++) {
+            if (item.getItemId() == (100 + i)) {
+                getReunionsByLieu(listSalle.get(i));
+                return;
+            }
+        }
+
+    }
+
+    //created a Submenu with the list of Salle
+    private void createSubMenu(MenuItem parentItem) {
+        // Created a submenu
+        SubMenu subMenu = parentItem.getSubMenu();
+
+        //add all of Salle in Submenu
+        if (subMenu.size() < 1) {
+            List<Salle> listSalle = getSalles().getValue();
+            for (int i = 0; listSalle.size() > i; i++) {
+                subMenu.add(0, 100 + i, i, listSalle.get(i).getLieu());
+            }
+        }
+        // display a Submenu
+        parentItem.expandActionView();
+    }
+
+    //user select date and show or filter with date
+    private void datePicker(Context context, ListChoiceDatePicker choice) {
+        Calendar calendar = new GregorianCalendar();
+
+        final Calendar c = Calendar.getInstance();
+        int lastSelectedYear = c.get(Calendar.YEAR);
+        int lastSelectedMonth = c.get(Calendar.MONTH);
+        int lastSelectedDay = c.get(Calendar.DAY_OF_MONTH);
+
+        // Date Set Listener.
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
+
+            calendar.set(year, month, dayOfMonth);
+
+            switch (choice) {
+                case filter:
+                    //filter with a calendar with date select by user
+                    getReunionsByDate(calendar);
+                    break;
+                case create:
+                    //get date for createView and show date
+                    datePick.setValue(calendar);
+                    selectYearToCreate = year;
+                    selectMonthToCreate = month;
+                    selectDayToCreate = dayOfMonth;
+            }
+        };
+
+        // Create DatePickerDialog:
+        DatePickerDialog datePickerDialog = new DatePickerDialog(context,
+                dateSetListener, lastSelectedYear, lastSelectedMonth, lastSelectedDay);
+
+        // Show
+        datePickerDialog.show();
+    }
+
+    //user select time and show time
+    private void timepicker(Context context, ChoiceTime choice) {
+        Calendar calendar = new GregorianCalendar();
+
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        int curentHour = c.get(Calendar.HOUR_OF_DAY);
+        int curentMinute = c.get(Calendar.MINUTE);
+
+
+        // Time Set Listener.
+        TimePickerDialog.OnTimeSetListener timeSetListener = (view, hourOfDay, minute) -> {
+            calendar.set(0, 0, 0, hourOfDay, minute);
+            switch (choice) {
+                case start:
+                    hourStart.setValue(calendar);
+
+                    selectHourToCreate = hourOfDay;
+                    selectMinuteToCreate = minute;
+
+                case end:
+                    hourEnd.setValue(calendar);
+                    duration = (hourOfDay - selectHourToCreate) * 60 + (minute - selectMinuteToCreate);
+                    initializeSalleReunion(context);
+            }
+        };
+
+        // Create TimePickerDialog:
+        TimePickerDialog timePickerDialog = new TimePickerDialog(context,
+                timeSetListener, curentHour, curentMinute, true);
+
+        // Show
+        timePickerDialog.show();
+    }
+
+    //initialize the list of Venue available
+    private void initializeSalleReunion(Context context) {
+        Calendar calendar = (Calendar) new GregorianCalendar(selectYearToCreate, selectMonthToCreate, selectDayToCreate, selectHourToCreate, selectMinuteToCreate, 0);
+        listOfSalleAvailaibleAdapterItems.setValue(new ArrayAdapter<>(context, R.layout.item_list_salle, getSalleAvailable(calendar, duration)));
+    }
+
+
+    //-----------------------
+    //Create View
+    //-----------------------
+
+    //-----------------------
+    //Data
+    //-----------------------
+
+    public MutableLiveData<Calendar> datePick = new MutableLiveData<>();
+
+    public MutableLiveData<Calendar> hourStart = new MutableLiveData<>();
+    public MutableLiveData<Calendar> hourEnd = new MutableLiveData<>();
+
+    public MutableLiveData<ArrayAdapter<String>> listOfSalleAvailaibleAdapterItems = new MutableLiveData<>();
+    public MutableLiveData<ArrayList<String>> listOfParticipant = new MutableLiveData<>();
+
+    //-----------------------
+    //Variable
+    //-----------------------
+    public enum ChoiceTime {start, end}
+
+    public enum ListChoiceDatePicker {filter, create}
+
+    int duration;
+    int selectYearToCreate;
+    int selectMonthToCreate;
+    int selectDayToCreate;
+    int selectHourToCreate;
+    int selectMinuteToCreate;
+
+    public void datePickerCreateView(Context context, ListChoiceDatePicker choice) {
+        datePicker(context, choice);
+    }
+
+    public void timePickerStart(Context context) {
+        timepicker(context, ChoiceTime.start);
+    }
+
+    public void timePickerEnd(Context context) {
+        timepicker(context, ChoiceTime.end);
+    }
+
+
+    //for add a email to a list of Email
+    public void addToListOfParticipant(String email) {
+        ArrayList<String> listOfEmail = listOfParticipant.getValue();
+        listOfEmail.add(email);
+        listOfParticipant.setValue(listOfEmail);
+
+    }
+
+    //for show the email in textView
+    public String listOfEmailToShow(ArrayList<String> strings) {
+        String listOfEmail = null;
+        if (!strings.isEmpty()) {
+            for (String email : strings) {
+                if (listOfEmail == null) {
+                    listOfEmail = email;
+                } else {
+                    listOfEmail = listOfEmail + " \n" + email;
+                }
+            }
+        }
+        return listOfEmail;
+    }
+
+    public void createReunion(String nameOfReunion, String nameOfSalle) {
+        Calendar calendar = new GregorianCalendar(selectYearToCreate, selectMonthToCreate, selectDayToCreate, selectHourToCreate, selectMinuteToCreate, 0);
+        Reunion reunion = new Reunion(getIdForNewReunion(), nameOfReunion, calendar, duration, getSalleWithString(nameOfSalle), listOfParticipant.getValue());
+        createReunion(reunion);
     }
 }

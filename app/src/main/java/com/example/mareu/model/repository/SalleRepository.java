@@ -14,8 +14,8 @@ public class SalleRepository {
     private static SalleApiService service;
 
 
-    public SalleRepository(SalleApiService service) {
-        this.service = service;
+    private SalleRepository(SalleApiService service) {
+        SalleRepository.service = service;
     }
 
     public List<Salle> getSalles() {
@@ -35,7 +35,7 @@ public class SalleRepository {
     /**
      * Singleton  (pour avoir une seule instance SalleRepository)
      *
-     * @param service
+     * @param service (SalleApiService)
      * @return instance_of_SalleRepository
      */
     public static SalleRepository getInstance(SalleApiService service) {

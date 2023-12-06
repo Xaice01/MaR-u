@@ -2,7 +2,7 @@ package com.example.mareu.view;
 
 
 import android.content.Context;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.ListAdapter;
 
 import com.example.mareu.R;
 import com.example.mareu.model.Reunion;
-import com.example.mareu.viewmodel.ReunionViewModel;
 
 import java.util.Objects;
 
@@ -48,9 +47,7 @@ public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> 
 
     @Override
     public void onBindViewHolder(ReunionViewHolder holder, int position) {
-        Log.d("Xavier", "aprés le holder.bind");
         holder.bind(getItem(position), callback);
-        Log.d("Xavier", "aprés le holder.bind");
     }
 
     public static final DiffUtil.ItemCallback<Reunion> DIFF_CALLBACK =

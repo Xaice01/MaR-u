@@ -1,5 +1,6 @@
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/menu_filtre_date"
         android:title="@string/Filter_by_date"
@@ -16,5 +17,4 @@
         android:id="@+id/menu_filtre_resert"
         android:title="@string/Filter_resert"
         app:showAsAction="never" />
-
 </menu>

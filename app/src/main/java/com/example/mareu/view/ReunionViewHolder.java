@@ -31,15 +31,9 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
     public void bind(Reunion reunion, ReunionListAdapter.Listener callback) {
 
         textViewNameHeureSalle.setText(reunion.getName() + " - " + reunion.getDate().get(Calendar.HOUR_OF_DAY) + "H" + reunion.getDate().get(Calendar.MINUTE) + " - " + reunion.getVenue().getLieu());
+
         //recupération de la liste des Emails dans un seul string
-        //TODO voir comment faire pour le ViewModelProvider avec le mentor
-        //ReunionViewModel reunionViewModel;
-        //reunionViewModel = new ViewModelProvider(this).get(ReunionViewModel.class);
-        //String textEmail = reunionViewModel.listOfEmailInString(reunion);
-
         String textEmail = listOfEmailInString(reunion);
-
-
         textViewEmail.setText(textEmail);
         deleteButton.setOnClickListener(view -> callback.onClickDelete(reunion, getAdapterPosition()));
     }
