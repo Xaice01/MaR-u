@@ -19,7 +19,6 @@ import java.util.Objects;
 
 public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> {
 
-    //todo interface a faire entre listadater et le viewmodel
     private final Listener callback;
 
     /**

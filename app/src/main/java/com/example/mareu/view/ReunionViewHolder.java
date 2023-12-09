@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mareu.R;
 import com.example.mareu.model.Reunion;
+import com.example.mareu.viewmodel.ReunionViewModel;
 
 import java.util.Calendar;
 
@@ -33,21 +34,11 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
         textViewNameHeureSalle.setText(reunion.getName() + " - " + reunion.getDate().get(Calendar.HOUR_OF_DAY) + "H" + reunion.getDate().get(Calendar.MINUTE) + " - " + reunion.getVenue().getLieu());
 
         //recupération de la liste des Emails dans un seul string
-        String textEmail = listOfEmailInString(reunion);
+        ReunionViewModel reunionViewModel = new ReunionViewModel();
+        String textEmail = reunionViewModel.listOfEmailInString(reunion);
+
         textViewEmail.setText(textEmail);
         deleteButton.setOnClickListener(view -> callback.onClickDelete(reunion, getAdapterPosition()));
-    }
-
-    private String listOfEmailInString(Reunion reunion) {
-        String listofEmail = null;
-        for (String Email : reunion.getEmail_Person()) {
-            if (listofEmail == null) {
-                listofEmail = Email;
-            } else {
-                listofEmail += ", " + Email;
-            }
-        }
-        return listofEmail;
     }
 
 }

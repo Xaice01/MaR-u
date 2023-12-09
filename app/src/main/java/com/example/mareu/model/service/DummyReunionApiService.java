@@ -42,9 +42,10 @@ public class DummyReunionApiService implements ReunionApiService {
      * {@inheritDoc}
      */
     @Override
-    public List<Reunion> getReunionFilterByDate(Calendar calendar) {
+    public List<Reunion> getReunionFilterByDate(Calendar calendar, List<Reunion> listToFilter) {
+
         List<Reunion> listFilterByDate = new ArrayList<>();
-        for (Reunion reunionToCompare : reunions) {
+        for (Reunion reunionToCompare : listToFilter) {
             if (reunionToCompare.getDate().get(Calendar.YEAR) == calendar.get(Calendar.YEAR) & reunionToCompare.getDate().get(Calendar.DAY_OF_YEAR) == calendar.get(Calendar.DAY_OF_YEAR)) {
                 listFilterByDate.add(reunionToCompare);
             }
@@ -56,9 +57,9 @@ public class DummyReunionApiService implements ReunionApiService {
      * {@inheritDoc}
      */
     @Override
-    public List<Reunion> getReunionFilterByVenue(Salle salle) {
+    public List<Reunion> getReunionFilterByVenue(Salle salle, List<Reunion> listToFilter) {
         List<Reunion> listFilterByVenue = new ArrayList<>();
-        for (Reunion reunionToCompare : reunions) {
+        for (Reunion reunionToCompare : listToFilter) {
             if (reunionToCompare.getVenue().equals(salle)) {
                 listFilterByVenue.add(reunionToCompare);
             }

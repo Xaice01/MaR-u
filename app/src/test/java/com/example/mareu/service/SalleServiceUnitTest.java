@@ -1,4 +1,4 @@
-package com.example.mareu.model.repository;
+package com.example.mareu.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;

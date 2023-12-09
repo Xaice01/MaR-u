@@ -37,13 +37,13 @@ public interface ReunionApiService {
      *
      * @return {@link List}
      */
-    List<Reunion> getReunionFilterByDate(Calendar calendar);
+    List<Reunion> getReunionFilterByDate(Calendar calendar, List<Reunion> listToFilter);
 
     /**
      * Get Reunions Filter by Venue
      *
      * @return {@link List}
      */
-    List<Reunion> getReunionFilterByVenue(Salle salle);
+    List<Reunion> getReunionFilterByVenue(Salle salle, List<Reunion> listToFilter);
 
 }

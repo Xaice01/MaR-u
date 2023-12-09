@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class ReunionViewModel extends ViewModel {
-    //TODO viewModel Factory a faire
     //----------------------------------------------------
     //Repository
     //----------------------------------------------------
@@ -57,12 +56,40 @@ public class ReunionViewModel extends ViewModel {
 
     public enum filter {reset, date, lieu}
 
-
     private filter filterMain = filter.reset;
 
     private Salle salleFilter;
     private Calendar calendarFilter;
 
+    //----------------------------------------------------
+    //Create View
+    //----------------------------------------------------
+
+    //----------------------------------------------------
+    //Data
+    //----------------------------------------------------
+
+    public MutableLiveData<Calendar> datePick = new MutableLiveData<>();
+
+    public MutableLiveData<Calendar> hourStart = new MutableLiveData<>();
+    public MutableLiveData<Calendar> hourEnd = new MutableLiveData<>();
+
+    public MutableLiveData<ArrayAdapter<String>> listOfSalleAvailaibleAdapterItems = new MutableLiveData<>();
+    public MutableLiveData<ArrayList<String>> listOfParticipant = new MutableLiveData<>();
+
+    //----------------------------------------------------
+    //Variable
+    //----------------------------------------------------
+    public enum ChoiceTime {start, end}
+
+    public enum ListChoiceDatePicker {filter, create}
+
+    int duration;
+    int selectYearToCreate;
+    int selectMonthToCreate;
+    int selectDayToCreate;
+    int selectHourToCreate;
+    int selectMinuteToCreate;
 
     //----------------------------------------------------
     //inisialization
@@ -76,23 +103,33 @@ public class ReunionViewModel extends ViewModel {
      * setValue salleRepository to MutableLiveData salles
      */
     public void init() {
+        List<Reunion> listToFilter = reunions.getValue();
+        List<Reunion> listToActualise = new ArrayList<>();
         switch (filterMain) {
             case reset:
-                reunions.setValue(reunionRepository.getReunions());
+                listToActualise = reunionRepository.getReunions();
+                //reunions.setValue(reunionRepository.getReunions());
                 break;
             case date:
-                reunions.setValue(reunionRepository.getReunionFilterByDate(calendarFilter));
+                listToActualise = reunionRepository.getReunionFilterByDate(calendarFilter, listToFilter);
+                //reunions.setValue(reunionRepository.getReunionFilterByDate(calendarFilter,listToFilter));
                 break;
             case lieu:
-                reunions.setValue(reunionRepository.getReunionFilterByVenue(salleFilter));
+                listToActualise = reunionRepository.getReunionFilterByVenue(salleFilter, listToFilter);
+                //reunions.setValue(reunionRepository.getReunionFilterByVenue(salleFilter,listToFilter));
                 break;
 
             default:
-                reunions.setValue(reunionRepository.getReunions());
+                //reunions.setValue(reunionRepository.getReunions());
         }
+        actualisedLiveDataReunions(listToActualise);
 
         salles.setValue(salleRepository.getSalles());
         listOfParticipant.setValue(new ArrayList<>());
+    }
+
+    private void actualisedLiveDataReunions(List<Reunion> listToActualise) {
+        reunions.setValue(listToActualise);
     }
 
     //----------------------------------------------------
@@ -130,6 +167,7 @@ public class ReunionViewModel extends ViewModel {
             if (filterMain == filter.reset) {
                 deletePosition.setValue(position);
             } else {
+                deletePosition.setValue(position);
                 init();
             }
         } else {
@@ -174,6 +212,24 @@ public class ReunionViewModel extends ViewModel {
         }
         return listSalle;
 
+    }
+
+    /**
+     * Get all of email in one String
+     *
+     * @param reunion reunion to have email list
+     * @return String with all of email
+     */
+    public String listOfEmailInString(Reunion reunion) {
+        String listofEmail = null;
+        for (String Email : reunion.getEmail_Person()) {
+            if (listofEmail == null) {
+                listofEmail = Email;
+            } else {
+                listofEmail += ", " + Email;
+            }
+        }
+        return listofEmail;
     }
 
     /**
@@ -230,24 +286,13 @@ public class ReunionViewModel extends ViewModel {
         return deletePosition;
     }
 
-    /**
-     * get list of Email in one string
-     *
-     * @param reunion reunion to get a list of email
-     * @return list of email in one string
-     */
-    public String listOfEmailInString(Reunion reunion) {
-        String listofEmail = null;
-        for (String Email : reunion.getEmail_Person()) {
-            if (listofEmail == null) {
-                listofEmail = Email;
-            } else {
-                listofEmail = listofEmail + ", " + Email;
-            }
-        }
-        return listofEmail;
-    }
 
+    /**
+     * Create a menu and Submenu for filter Reunions
+     *
+     * @param item    the menu
+     * @param context the context for show the date picker in the good View
+     */
     public void selectedMenu(MenuItem item, Context context) {
 
         //filter by date
@@ -370,59 +415,38 @@ public class ReunionViewModel extends ViewModel {
         listOfSalleAvailaibleAdapterItems.setValue(new ArrayAdapter<>(context, R.layout.item_list_salle, getSalleAvailable(calendar, duration)));
     }
 
-
-    //-----------------------
-    //Create View
-    //-----------------------
-
-    //-----------------------
-    //Data
-    //-----------------------
-
-    public MutableLiveData<Calendar> datePick = new MutableLiveData<>();
-
-    public MutableLiveData<Calendar> hourStart = new MutableLiveData<>();
-    public MutableLiveData<Calendar> hourEnd = new MutableLiveData<>();
-
-    public MutableLiveData<ArrayAdapter<String>> listOfSalleAvailaibleAdapterItems = new MutableLiveData<>();
-    public MutableLiveData<ArrayList<String>> listOfParticipant = new MutableLiveData<>();
-
-    //-----------------------
-    //Variable
-    //-----------------------
-    public enum ChoiceTime {start, end}
-
-    public enum ListChoiceDatePicker {filter, create}
-
-    int duration;
-    int selectYearToCreate;
-    int selectMonthToCreate;
-    int selectDayToCreate;
-    int selectHourToCreate;
-    int selectMinuteToCreate;
-
+    //select Date for new Reunion
     public void datePickerCreateView(Context context, ListChoiceDatePicker choice) {
         datePicker(context, choice);
     }
 
+    //select Hour and minute to start Reunion
     public void timePickerStart(Context context) {
         timepicker(context, ChoiceTime.start);
     }
 
+    //select Hour and minute to end Reunion
     public void timePickerEnd(Context context) {
         timepicker(context, ChoiceTime.end);
     }
 
 
-    //for add a email to a list of Email
+    /**
+     * for add a email to a list of Email in createView
+     *
+     * @param email email to add of the list
+     */
     public void addToListOfParticipant(String email) {
         ArrayList<String> listOfEmail = listOfParticipant.getValue();
         listOfEmail.add(email);
         listOfParticipant.setValue(listOfEmail);
-
     }
 
-    //for show the email in textView
+    /**
+     * for show the emails in textView
+     *
+     * @param strings (ArrayList<String>) list of email
+     */
     public String listOfEmailToShow(ArrayList<String> strings) {
         String listOfEmail = null;
         if (!strings.isEmpty()) {
@@ -437,6 +461,12 @@ public class ReunionViewModel extends ViewModel {
         return listOfEmail;
     }
 
+    /**
+     * create Reunion with only the name of Reunion and name of Salle
+     *
+     * @param nameOfReunion name of the reunion to create
+     * @param nameOfSalle   name of the salle to reunion create
+     */
     public void createReunion(String nameOfReunion, String nameOfSalle) {
         Calendar calendar = new GregorianCalendar(selectYearToCreate, selectMonthToCreate, selectDayToCreate, selectHourToCreate, selectMinuteToCreate, 0);
         Reunion reunion = new Reunion(getIdForNewReunion(), nameOfReunion, calendar, duration, getSalleWithString(nameOfSalle), listOfParticipant.getValue());
