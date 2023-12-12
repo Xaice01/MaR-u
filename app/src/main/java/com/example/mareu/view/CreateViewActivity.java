@@ -10,8 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.mareu.MainActivity;
 import com.example.mareu.databinding.ActivityCreateViewBinding;
+import com.example.mareu.main.MainActivity;
 import com.example.mareu.viewmodel.ReunionViewModel;
 
 import java.util.Calendar;
@@ -96,7 +96,7 @@ public class CreateViewActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "created Reunion", Toast.LENGTH_SHORT).show();
 
                 //back to the mainActivity
-                Intent intent = new Intent(v.getContext(), MainActivity.class);
+                Intent intent = new Intent(view.getContext(), MainActivity.class);
                 startActivity(intent);
             }
         });

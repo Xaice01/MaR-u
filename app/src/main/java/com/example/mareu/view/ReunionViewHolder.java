@@ -38,7 +38,13 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
         String textEmail = reunionViewModel.listOfEmailInString(reunion);
 
         textViewEmail.setText(textEmail);
-        deleteButton.setOnClickListener(view -> callback.onClickDelete(reunion, getAdapterPosition()));
+        deleteButton.setOnClickListener(view -> {
+            try {
+                callback.onClickDelete(reunion, getAdapterPosition());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
 }

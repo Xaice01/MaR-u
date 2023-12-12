@@ -5,12 +5,10 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -18,7 +16,6 @@ import android.view.ViewParent;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.hamcrest.Description;
@@ -31,7 +28,8 @@ import org.junit.runner.RunWith;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+
+import com.example.mareu.main.MainActivity;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -76,7 +74,7 @@ public class InstrumentedTest {
         onView(withId(R.id.list_reunion_recyclerview))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, new DeleteViewAction()));
 
-        Thread.sleep(1000); //wait to delete Reunion
+        Thread.sleep(1000); //wait for delete animation
 
         textView = onView(
                 allOf(withId(R.id.item_list_name), withText("Réunion A - 19H0 - Mario"),

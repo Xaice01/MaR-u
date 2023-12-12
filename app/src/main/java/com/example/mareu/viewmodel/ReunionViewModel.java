@@ -122,7 +122,8 @@ public class ReunionViewModel extends ViewModel {
             default:
                 //reunions.setValue(reunionRepository.getReunions());
         }
-        actualisedLiveDataReunions(listToActualise);
+        reunions.setValue(listToActualise);
+        //actualisedLiveDataReunions(listToActualise);
 
         salles.setValue(salleRepository.getSalles());
         listOfParticipant.setValue(new ArrayList<>());
@@ -159,9 +160,9 @@ public class ReunionViewModel extends ViewModel {
     /**
      * delete a Reunion
      *
-     * @param reunion  reunion to delete
+     * @param reunion reunion to delete
      */
-    public void deleteReunion(Reunion reunion, int position) {
+    public void deleteReunion(Reunion reunion, int position) throws InterruptedException {
         //if the reunion is delete
         if (reunionRepository.deleteReunion(reunion)) {
             if (filterMain == filter.reset) {

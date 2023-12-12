@@ -127,7 +127,7 @@ public class ReunionViewModelTest extends TestCase {
     }
 
     @Test
-    public void testDeleteReunion() {
+    public void testDeleteReunion() throws InterruptedException {
         // Given
         int position = 1;
         Reunion reunionToDelete = reunionViewModel.getReunions().getValue().get(position);
@@ -207,7 +207,7 @@ public class ReunionViewModelTest extends TestCase {
     }
 
     @Test
-    public void testGetDeletePosition() {
+    public void testGetDeletePosition() throws InterruptedException {
         // Given
         int position = 1;
         Reunion reunionToDelete = reunionViewModel.getReunions().getValue().get(position);
