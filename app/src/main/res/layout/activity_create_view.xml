@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,12 +15,14 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_Nom_Reunion"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="@dimen/margin_horizontal"
             android:layout_marginTop="48dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="@dimen/margin_horizontal"
             android:hint="@string/Name_of_reunion"
+            android:maxWidth="@dimen/max_width_text"
+            android:minWidth="@dimen/min_width_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -30,6 +31,8 @@
                 android:id="@+id/textInput_Nom_Reunion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxWidth="@dimen/max_width_text"
+                android:minHeight="@dimen/min_height_text"
 
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -48,7 +51,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInput_Date"
                 android:layout_width="match_parent"
+                android:maxWidth="@dimen/max_width_text"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/min_height_text"
 
                 android:drawableEnd="@drawable/baseline_calendar_today_24"
                 android:focusable="false"
@@ -71,7 +76,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInput_Duree_start"
                 android:layout_width="match_parent"
+                android:maxWidth="@dimen/max_width_text"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/min_height_text"
 
                 android:drawableEnd="@drawable/baseline_access_time_24"
                 android:focusable="false"
@@ -93,7 +100,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInput_Duree_end"
                 android:layout_width="match_parent"
+                android:maxWidth="@dimen/max_width_text"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/min_height_text"
 
                 android:drawableEnd="@drawable/baseline_access_time_24"
                 android:focusable="false"
@@ -115,17 +124,21 @@
             app:layout_constraintTop_toBottomOf="@+id/outlinedTextField_Duree_start"
             app:endIconMode="dropdown_menu">
 
-            <AutoCompleteTextView
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/autoComplete_Salle_Reunion"
                 android:layout_width="match_parent"
+                android:maxWidth="@dimen/max_width_text"
                 android:layout_height="wrap_content"
-                android:inputType="none" />
+                android:minHeight="@dimen/min_height_text"
+                android:inputType="none"
+                android:hint="@string/descriptionautoComplete_Salle_Reunion" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/outlinedTextField_Email"
             android:layout_width="0dp"
+            android:maxWidth="@dimen/max_width_text"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_between"
             android:hint="@string/Participant"
@@ -137,7 +150,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/textInput_Email"
                 android:layout_width="match_parent"
+                android:maxWidth="@dimen/max_width_text"
                 android:layout_height="wrap_content"
+                android:minHeight="@dimen/min_height_text"
                 android:drawableEnd="@drawable/baseline_send_24"
                 android:singleLine="true" />
 

@@ -10,10 +10,8 @@
     <string name="Participant">Participant</string>
     <string name="Create_Reunion">Créer la Reunion</string>
     <string name="Add_Reunion">Ajoute une Réunion</string>
-
-    <!-- error to field text (createReunion)-->
     <string name="Error_Name_of_Reunion">entrez un nom de reunion</string>
-
+    <string name="descriptionautoComplete_Salle_Reunion">liste de reunion a choisir</string>
     <!-- item menu (menu.XML)-->
     <string name="Filter_by_date">Filtrer par date</string>
     <string name="Filter_by_Venue">Filtrer par lieu</string>
@@ -56,4 +54,10 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="title_activity_main2">MainActivity2</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 </resources>
