@@ -12,6 +12,10 @@
     </style>
 
     <style name="CreatedReunion" parent="Theme.Material3.DynamicColors.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondaryContainer">@color/colorPrimary</item>
+        <item name="actionBarTheme">@style/Theme.MaRéu</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
     </style>
 </resources>
