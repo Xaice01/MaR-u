@@ -1,4 +1,4 @@
-package com.example.mareu;
+package com.example.mareu.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -59,6 +59,32 @@ public class ReunionServiceUnitTest {
         service.deleteReunion(reunionToDelete);
         //test
         assertFalse(service.getReunions().contains(reunionToDelete));
+    }
+
+    @Test
+    public void getReunionFilterByDateWithSuccess() {
+        //setup
+        List<Reunion> listToFilter = service.getReunions();
+        Calendar calendar = (Calendar) new GregorianCalendar(2023, 11, 20, 19, 0, 0);
+        Reunion reunionToAdd = new Reunion((long) 4, "Réunion A", calendar, 45,
+                new Salle("Mario", 10), Arrays.asList("Xavier.carpentier@gmail.com", "Nour.Elislam.Saidi@gmail.com", "Personne.réunion@gmail.com"));
+        //test
+        assertFalse(service.getReunionFilterByDate(calendar, listToFilter).contains(reunionToAdd));
+        service.createReunion(reunionToAdd);
+        assertTrue(service.getReunionFilterByDate(calendar, listToFilter).contains(reunionToAdd));
+    }
+
+    @Test
+    public void getReunionFilterByVenueWithSuccess() {
+        //setup
+        List<Reunion> listToFilter = service.getReunions();
+        Salle venue = new Salle("Wario", 100);
+        Reunion reunionToAdd = new Reunion((long) 6, "Réunion A", (Calendar) new GregorianCalendar(2023, 11, 20, 19, 0, 0), 45,
+                venue, Arrays.asList("Xavier.carpentier@gmail.com", "Nour.Elislam.Saidi@gmail.com", "Personne.réunion@gmail.com"));
+        //test
+        assertFalse(service.getReunionFilterByVenue(venue, listToFilter).contains(reunionToAdd));
+        service.createReunion(reunionToAdd);
+        assertTrue(service.getReunionFilterByVenue(venue, listToFilter).contains(reunionToAdd));
     }
 
 }

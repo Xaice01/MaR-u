@@ -2,6 +2,12 @@
 <resources>
     <dimen name="padding_8dp">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="margin_Duree">8dp</dimen>
+    <dimen name="margin_between">24dp</dimen>
     <dimen name="marging_floating_Buttom">16dp</dimen>
     <dimen name="padding_NestedScrolView">24dp</dimen>
+    <dimen name="min_height_text">48dp</dimen>
+    <dimen name="min_width_text">300dp</dimen>
+    <dimen name="max_width_text">480dp</dimen>
+    <dimen name="margin_horizontal">24dp</dimen>
 </resources>

@@ -2,7 +2,7 @@ package com.example.mareu.view;
 
 
 import android.content.Context;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +19,6 @@ import java.util.Objects;
 
 public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> {
 
-    //todo interface a faire entre listadater et le viewmodel
     private final Listener callback;
 
     /**
@@ -33,16 +32,11 @@ public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> 
 
     public ReunionListAdapter(Listener callback) {
         super(DIFF_CALLBACK);
-        //TODO a supprimer
-        Log.d("Xavier", "entrer dans ReunionListAdapter");
         this.callback = callback;
     }
 
     @Override
     public ReunionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //TODO a retirer
-        Log.d("Xavier", "entrer dans onCreateViewHolder");
-
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.item_reunion, parent, false);
@@ -52,9 +46,7 @@ public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> 
 
     @Override
     public void onBindViewHolder(ReunionViewHolder holder, int position) {
-        Log.d("Xavier", "aprés le holder.bind");
         holder.bind(getItem(position), callback);
-        Log.d("Xavier", "aprés le holder.bind");
     }
 
     public static final DiffUtil.ItemCallback<Reunion> DIFF_CALLBACK =

@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mareu.R;
 import com.example.mareu.model.Reunion;
+import com.example.mareu.viewmodel.ReunionViewModel;
+
+import java.util.Calendar;
 
 public class ReunionViewHolder extends RecyclerView.ViewHolder {
 
@@ -16,6 +19,7 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
     private TextView textViewNameHeureSalle;
     private TextView textViewEmail;
     private ImageButton deleteButton;
+
 
 
     public ReunionViewHolder(@NonNull View itemView) {
@@ -26,17 +30,17 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Reunion reunion, ReunionListAdapter.Listener callback) {
-        //TODO a mettre dans le viewmodel( la logique) (boucle for avec toutes les adresse mail)
-        textViewNameHeureSalle.setText(reunion.getName() + " - " + reunion.getDate().HOUR_OF_DAY + "H" + reunion.getDate().MINUTE + " - " + reunion.getVenue().getLieu());
-        String textEmail = reunion.getEmail_Person().get(0);
-        if (reunion.getEmail_Person().size() > 1) {
-            textEmail = textEmail + ", " + reunion.getEmail_Person().get(1);
-            if (reunion.getEmail_Person().size() > 2)
-                textEmail = textEmail + ", " + reunion.getEmail_Person().get(2);
-        }
+
+        textViewNameHeureSalle.setText(reunion.getName() + " - " + reunion.getDate().get(Calendar.HOUR_OF_DAY) + "H" + reunion.getDate().get(Calendar.MINUTE) + " - " + reunion.getVenue().getLieu());
+
+        //recupération de la liste des Emails dans un seul string
+        ReunionViewModel reunionViewModel = new ReunionViewModel();
+        String textEmail = reunionViewModel.listOfEmailInString(reunion);
+
         textViewEmail.setText(textEmail);
         deleteButton.setOnClickListener(view -> callback.onClickDelete(reunion, getAdapterPosition()));
     }
 
-
 }
+
+
