@@ -307,7 +307,7 @@ public class ReunionViewModel extends ViewModel {
             return;
         }
         //Resert filter
-        if (item.getItemId() == R.id.menu_filtre_resert) {
+        if (item.getItemId() == R.id.menu_filtre_reset) {
             getReunions();
             return;
         }

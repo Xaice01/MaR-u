@@ -51,7 +51,7 @@ public class CreateViewActivity extends AppCompatActivity {
 
 
         //for change the text of the Date
-        reunionViewModel.datePick.observe(this, calendar -> binding.textInputDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR)));
+        reunionViewModel.datePick.observe(this, calendar -> binding.textInputDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR)));
 
         //for change the text of time to start
         reunionViewModel.hourStart.observe(this, calendar -> binding.textInputDureeStart.setText(calendar.get(Calendar.HOUR_OF_DAY) + "H" + calendar.get(Calendar.MINUTE)));
