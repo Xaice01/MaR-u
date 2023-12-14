@@ -14,7 +14,7 @@
         </menu>
     </item>
     <item
-        android:id="@+id/menu_filtre_resert"
-        android:title="@string/Filter_resert"
+        android:id="@+id/menu_filtre_reset"
+        android:title="@string/Filter_reset"
         app:showAsAction="never" />
 </menu>

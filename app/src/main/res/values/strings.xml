@@ -15,7 +15,7 @@
     <!-- item menu (menu.XML)-->
     <string name="Filter_by_date">Filtrer par date</string>
     <string name="Filter_by_Venue">Filtrer par lieu</string>
-    <string name="Filter_resert">Resert du filtre </string>
+    <string name="Filter_reset">Reset du filtre </string>
 
 
     <string name="lorem_ipsum">

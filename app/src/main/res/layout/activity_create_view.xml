@@ -127,11 +127,11 @@
             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/autoComplete_Salle_Reunion"
                 android:layout_width="match_parent"
-                android:maxWidth="@dimen/max_width_text"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/min_height_text"
+                android:hint="@string/descriptionautoComplete_Salle_Reunion"
                 android:inputType="none"
-                android:hint="@string/descriptionautoComplete_Salle_Reunion" />
+                android:maxWidth="@dimen/max_width_text"
+                android:minHeight="@dimen/min_height_text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
