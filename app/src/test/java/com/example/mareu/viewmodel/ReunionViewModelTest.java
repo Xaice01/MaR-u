@@ -1,32 +1,23 @@
 package com.example.mareu.viewmodel;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStore;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.mareu.model.Reunion;
 import com.example.mareu.model.Salle;
 import com.example.mareu.model.repository.ReunionRepository;
-import com.example.mareu.model.repository.SalleRepository;
 import com.example.mareu.model.service.DummyReunionApiService;
-import com.example.mareu.model.service.DummyReunionGenerator;
 import com.example.mareu.model.service.DummySalleApiService;
 import com.example.mareu.model.service.ReunionApiService;
 import com.example.mareu.model.service.SalleApiService;
 
 import junit.framework.TestCase;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -220,15 +211,6 @@ public class ReunionViewModelTest extends TestCase {
         assertEquals(position, positionToCompare);
     }
 
-    public void testDatePickerCreateView() {
-    }
-
-    public void testTimePickerStart() {
-    }
-
-    public void testTimePickerEnd() {
-    }
-
     @Test
     public void testAddToListOfParticipant() {
         // Given
@@ -275,7 +257,6 @@ public class ReunionViewModelTest extends TestCase {
         reunionViewModel.selectHourToCreate = 0;
         reunionViewModel.selectMinuteToCreate = 0;
         String nameOfReuion = "TestNameOfReunion";
-        String NameOfSalle = "Mario";
         int reunionSizeBefore = reunionViewModel.getReunions().getValue().size();
 
         //When

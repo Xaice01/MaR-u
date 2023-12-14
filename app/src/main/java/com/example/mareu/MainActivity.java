@@ -20,11 +20,9 @@ import com.example.mareu.view.ReunionListAdapter;
 import com.example.mareu.viewmodel.ReunionViewModel;
 
 
-
 public class MainActivity extends AppCompatActivity implements ReunionListAdapter.Listener {
 
     private ActivityMainBinding binding;
-
 
     private ReunionViewModel reunionViewModel;
     private ReunionListAdapter listAdapter;
@@ -101,6 +99,3 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
     }
 
 }
-
-
-

@@ -159,7 +159,7 @@ public class ReunionViewModel extends ViewModel {
     /**
      * delete a Reunion
      *
-     * @param reunion  reunion to delete
+     * @param reunion reunion to delete
      */
     public void deleteReunion(Reunion reunion, int position) {
         //if the reunion is delete

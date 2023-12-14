@@ -142,5 +142,4 @@ public class CreateViewActivity extends AppCompatActivity {
     }
 
 
-
 }

@@ -21,7 +21,6 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
     private ImageButton deleteButton;
 
 
-
     public ReunionViewHolder(@NonNull View itemView) {
         super(itemView);
         textViewNameHeureSalle = itemView.findViewById(R.id.item_list_name);
