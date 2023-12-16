@@ -440,6 +440,7 @@ public class ReunionViewModel extends ViewModel {
         ArrayList<String> listOfEmail = listOfParticipant.getValue();
         listOfEmail.add(email);
         listOfParticipant.setValue(listOfEmail);
+
     }
 
     /**
