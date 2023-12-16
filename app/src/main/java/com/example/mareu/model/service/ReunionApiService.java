@@ -32,18 +32,4 @@ public interface ReunionApiService {
      */
     boolean deleteReunion(Reunion reunion);
 
-    /**
-     * Get Reunions filter by Date
-     *
-     * @return {@link List}
-     */
-    List<Reunion> getReunionFilterByDate(Calendar calendar, List<Reunion> listToFilter);
-
-    /**
-     * Get Reunions Filter by Venue
-     *
-     * @return {@link List}
-     */
-    List<Reunion> getReunionFilterByVenue(Salle salle, List<Reunion> listToFilter);
-
 }

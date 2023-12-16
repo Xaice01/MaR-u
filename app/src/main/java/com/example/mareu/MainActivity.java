@@ -42,9 +42,6 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
         //configure reunionViewModel
         reunionViewModel = new ViewModelProvider(this).get(ReunionViewModel.class);
         reunionViewModel.getReunions().observe(this, list -> listAdapter.submitList(list));
-        //for the delete of item
-        reunionViewModel.getDeletePosition().observe(this, position -> listAdapter.notifyItemRemoved(position));
-
 
         //configure RecyclerView
         recyclerView = binding.listReunionRecyclerview;
