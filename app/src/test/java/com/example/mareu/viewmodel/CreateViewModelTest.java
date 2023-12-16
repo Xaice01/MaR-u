@@ -1,7 +1,6 @@
 package com.example.mareu.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.Observer;
 
 import com.example.mareu.model.Reunion;
 import com.example.mareu.model.Salle;
@@ -16,7 +15,6 @@ import junit.framework.TestCase;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;

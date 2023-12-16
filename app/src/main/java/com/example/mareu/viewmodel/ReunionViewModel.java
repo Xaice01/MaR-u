@@ -70,6 +70,14 @@ public class ReunionViewModel extends ViewModel {
      * setValue salleRepository to MutableLiveData salles
      */
     public void init() {
+        setReunionWithFilter();
+        salles.setValue(salleRepository.getSalles());
+    }
+
+    /**
+     * set the list of reunions to show
+     */
+    public void setReunionWithFilter() {
         List<Reunion> listToFilter = reunions.getValue();
         List<Reunion> listToActualise = new ArrayList<>();
         switch (filterMain) {
@@ -90,8 +98,6 @@ public class ReunionViewModel extends ViewModel {
                 //reunions.setValue(reunionRepository.getReunions());
         }
         reunions.setValue(listToActualise);
-
-        salles.setValue(salleRepository.getSalles());
     }
 
     //----------------------------------------------------
