@@ -116,7 +116,7 @@ public class ReunionViewModel extends ViewModel {
                 deletePosition.setValue(position);
             } else {
                 deletePosition.setValue(position);
-                init();
+                setReunionWithFilter();
             }
         } else {
             throw new IllegalArgumentException("reunion not found");
@@ -146,21 +146,21 @@ public class ReunionViewModel extends ViewModel {
      */
     public LiveData<List<Reunion>> getReunions() {
         filterMain = filter.reset;
-        init();
+        setReunionWithFilter();
         return reunions;
     }
 
     public LiveData<List<Reunion>> getReunionsByDate(Calendar calendar) {
         calendarFilter = calendar;
         filterMain = filter.date;
-        init();
+        setReunionWithFilter();
         return reunions;
     }
 
     public LiveData<List<Reunion>> getReunionsByLieu(Salle salle) {
         salleFilter = salle;
         filterMain = filter.lieu;
-        init();
+        setReunionWithFilter();
         return reunions;
     }
 
