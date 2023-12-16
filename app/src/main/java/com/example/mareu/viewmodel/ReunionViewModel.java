@@ -18,6 +18,11 @@ import com.example.mareu.model.service.DummyReunionApiService;
 import com.example.mareu.model.service.DummySalleApiService;
 import com.example.mareu.model.service.ReunionApiService;
 import com.example.mareu.model.service.SalleApiService;
+import com.example.mareu.model.usecase.DeleteReunionUseCase;
+import com.example.mareu.model.usecase.FilterReunionByDateUseCase;
+import com.example.mareu.model.usecase.FilterReunionByVenueUseCase;
+import com.example.mareu.model.usecase.GetReunionsUseCase;
+import com.example.mareu.model.usecase.GetSallesUseCase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,31 +30,38 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class ReunionViewModel extends ViewModel {
-    //----------------------------------------------------
-    //Repository
-    //----------------------------------------------------
+    // region repository
 
     //injection de dépendance Data:DummyReunionApiService()
     private final ReunionApiService reunionApiService = new DummyReunionApiService();
-    private ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
+    private final ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
+
+    private final GetReunionsUseCase getReunionsUseCase = new GetReunionsUseCase(reunionRepository);
 
 
     //injection de dépendance Data:DummySalleApiService()
     private final SalleApiService salleApiService = new DummySalleApiService();
-    private SalleRepository salleRepository = SalleRepository.getInstance(salleApiService);
+    private final SalleRepository salleRepository = SalleRepository.getInstance(salleApiService);
+
+    private final GetSallesUseCase getSallesUseCase = new GetSallesUseCase(salleRepository);
+
+    private final FilterReunionByVenueUseCase filterReunionByVenueUseCase = new FilterReunionByVenueUseCase(reunionRepository);
+    private final FilterReunionByDateUseCase filterReunionByDateUseCase = new FilterReunionByDateUseCase(reunionRepository);
+    private final DeleteReunionUseCase deleteReunionUseCase = new DeleteReunionUseCase(reunionRepository);
+    // endregion
+
 
     //----------------------------------------------------
     //Data
     //----------------------------------------------------
 
-    private MutableLiveData<List<Reunion>> reunions = new MutableLiveData<>();
-    private MutableLiveData<List<Salle>> salles = new MutableLiveData<>();
+    private final MutableLiveData<List<Reunion>> reunions = new MutableLiveData<>();
+    private final MutableLiveData<List<Salle>> salles = new MutableLiveData<>();
 
     //----------------------------------------------------
     //Variable
     //----------------------------------------------------
 
-    private MutableLiveData<Integer> deletePosition = new MutableLiveData<>();
 
     public enum filter {reset, date, lieu}
 
@@ -71,26 +83,25 @@ public class ReunionViewModel extends ViewModel {
      */
     public void init() {
         setReunionWithFilter();
-        salles.setValue(salleRepository.getSalles());
+        salles.setValue(getSallesUseCase.getSalles());
     }
 
     /**
      * set the list of reunions to show
      */
     public void setReunionWithFilter() {
-        List<Reunion> listToFilter = reunions.getValue();
         List<Reunion> listToActualise = new ArrayList<>();
         switch (filterMain) {
             case reset:
-                listToActualise = reunionRepository.getReunions();
+                listToActualise = getReunionsUseCase.getReunions();
                 //reunions.setValue(reunionRepository.getReunions());
                 break;
             case date:
-                listToActualise = reunionRepository.getReunionFilterByDate(calendarFilter, listToFilter);
+                listToActualise = filterReunionByDateUseCase.filterReunionByDate(calendarFilter);
                 //reunions.setValue(reunionRepository.getReunionFilterByDate(calendarFilter,listToFilter));
                 break;
             case lieu:
-                listToActualise = reunionRepository.getReunionFilterByVenue(salleFilter, listToFilter);
+                listToActualise = filterReunionByVenueUseCase.filterReunionBySalle(salleFilter);
                 //reunions.setValue(reunionRepository.getReunionFilterByVenue(salleFilter,listToFilter));
                 break;
 
@@ -111,13 +122,8 @@ public class ReunionViewModel extends ViewModel {
      */
     public void deleteReunion(Reunion reunion, int position) {
         //if the reunion is delete
-        if (reunionRepository.deleteReunion(reunion)) {
-            if (filterMain == filter.reset) {
-                deletePosition.setValue(position);
-            } else {
-                deletePosition.setValue(position);
-                setReunionWithFilter();
-            }
+        if (deleteReunionUseCase.deleteReunion(reunion)) {
+            setReunionWithFilter();
         } else {
             throw new IllegalArgumentException("reunion not found");
         }
@@ -171,13 +177,6 @@ public class ReunionViewModel extends ViewModel {
         return salles;
     }
 
-    /**
-     * get position of item to delete
-     */
-    public LiveData<Integer> getDeletePosition() {
-        return deletePosition;
-    }
-
 
     /**
      * Create a menu and Submenu for filter Reunions
@@ -203,7 +202,7 @@ public class ReunionViewModel extends ViewModel {
             return;
         }
         //Submenu With all of Salle filter by Salle
-        List<Salle> listSalle = getSalles().getValue();
+        List<Salle> listSalle = getSallesUseCase.getSalles();
         for (int i = 0; listSalle.size() > i; i++) {
             if (item.getItemId() == (100 + i)) {
                 getReunionsByLieu(listSalle.get(i));
@@ -220,7 +219,7 @@ public class ReunionViewModel extends ViewModel {
 
         //add all of Salle in Submenu
         if (subMenu.size() < 1) {
-            List<Salle> listSalle = getSalles().getValue();
+            List<Salle> listSalle = getSallesUseCase.getSalles();
             for (int i = 0; listSalle.size() > i; i++) {
                 subMenu.add(0, 100 + i, i, listSalle.get(i).getLieu());
             }
