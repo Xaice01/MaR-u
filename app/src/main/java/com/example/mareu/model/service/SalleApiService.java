@@ -1,4 +1,4 @@
-package com.example.mareu.service;
+package com.example.mareu.model.service;
 
 import com.example.mareu.model.Salle;
 
@@ -18,14 +18,14 @@ public interface SalleApiService {
     /**
      * Create venue
      *
-     * @param salle
+     * @param salle Salle to Create
      */
     void createSalle(Salle salle);
 
     /**
      * delete venue
      *
-     * @param salle
+     * @param salle Salle to Delete
      */
     void deleteSalle(Salle salle);
 }

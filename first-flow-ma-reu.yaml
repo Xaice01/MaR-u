@@ -1,0 +1,18 @@
+appId: com.example.mareu
+---
+- launchApp
+- tapOn:
+    id: "com.example.mareu:id/item_list_delete_button"
+    index: 2
+- tapOn:
+    id: "com.example.mareu:id/floatingActionButton_AddReunion"
+- tapOn:
+    id: "com.example.mareu:id/textInput_Nom_Reunion"
+- inputText: "Maestro"
+- tapOn:
+    id: "com.example.mareu:id/textInput_Date"
+- tapOn:
+    id: "android:id/next"
+- tapOn: "25"
+- tapOn:
+    id: "android:id/button1"

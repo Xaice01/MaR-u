@@ -1,11 +1,14 @@
-package com.example.mareu.service;
+package com.example.mareu.model.service;
 
 import com.example.mareu.model.Salle;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
-
+/**
+ * Generator
+ * List of Salle
+ */
 public abstract class DummySalleGenerator {
 
     /**

@@ -1,4 +1,4 @@
-package com.example.mareu.service;
+package com.example.mareu.model.service;
 
 import com.example.mareu.model.Reunion;
 
@@ -31,7 +31,7 @@ public class DummyReunionApiService implements ReunionApiService {
      * {@inheritDoc}
      */
     @Override
-    public void deleteReunion(Reunion reunion) {
-        reunions.remove(reunion);
+    public boolean deleteReunion(Reunion reunion) {
+        return reunions.remove(reunion);
     }
 }

@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_filtre_date"
+        android:title="@string/Filter_by_date"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_filtre_lieu"
+        android:title="@string/Filter_by_Venue"
+        app:showAsAction="never">
+        <menu>
+
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_filtre_reset"
+        android:title="@string/Filter_reset"
+        app:showAsAction="never" />
+</menu>

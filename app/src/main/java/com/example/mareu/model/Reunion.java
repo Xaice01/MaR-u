@@ -1,6 +1,5 @@
 package com.example.mareu.model;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -44,12 +43,12 @@ public class Reunion {
     /**
      * Constructor
      *
-     * @param id
-     * @param name
-     * @param date
-     * @param duration
-     * @param venue
-     * @param email_Person
+     * @param id           id of the Reunion
+     * @param name         name of the Reunion
+     * @param date         date of the Reunion
+     * @param duration     duration of the Reunion
+     * @param venue        Salle of the Reunion
+     * @param email_Person List of people in the Reunion
      */
     public Reunion(Long id, String name, Calendar date, long duration, Salle venue, List<String> email_Person) {
         this.id = id;
@@ -115,11 +114,11 @@ public class Reunion {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reunion reunion = (Reunion) o;
-        return Objects.equals(id, reunion.id);
+        return duration == reunion.duration && id.equals(reunion.id) && name.equals(reunion.name) && date.equals(reunion.date) && venue.equals(reunion.venue) && email_Person.equals(reunion.email_Person);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, date, duration, venue, email_Person);
     }
 }

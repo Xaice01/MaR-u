@@ -1,4 +1,4 @@
-package com.example.mareu.service;
+package com.example.mareu.model.service;
 
 import com.example.mareu.model.Reunion;
 
@@ -19,15 +19,15 @@ public interface ReunionApiService {
     /**
      * Create a Reunion
      *
-     * @param reunion
+     * @param reunion to create
      */
     void createReunion(Reunion reunion);
 
     /**
      * Delete a Reunion
      *
-     * @param reunion
+     * @param reunion to delete
      */
-    void deleteReunion(Reunion reunion);
+    boolean deleteReunion(Reunion reunion);
 
 }
