@@ -16,9 +16,9 @@ import java.util.Calendar;
 public class ReunionViewHolder extends RecyclerView.ViewHolder {
 
 
-    private TextView textViewNameHeureSalle;
-    private TextView textViewEmail;
-    private ImageButton deleteButton;
+    private final TextView textViewNameHeureSalle;
+    private final TextView textViewEmail;
+    private final ImageButton deleteButton;
 
 
     public ReunionViewHolder(@NonNull View itemView) {
@@ -37,7 +37,7 @@ public class ReunionViewHolder extends RecyclerView.ViewHolder {
         String textEmail = reunionViewModel.listOfEmailInString(reunion);
 
         textViewEmail.setText(textEmail);
-        deleteButton.setOnClickListener(view -> callback.onClickDelete(reunion, getAdapterPosition()));
+        deleteButton.setOnClickListener(view -> callback.onClickDelete(reunion));
     }
 
 }

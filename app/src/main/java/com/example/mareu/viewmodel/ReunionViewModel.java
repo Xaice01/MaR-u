@@ -24,11 +24,14 @@ import com.example.mareu.model.usecase.FilterReunionByVenueUseCase;
 import com.example.mareu.model.usecase.GetReunionsUseCase;
 import com.example.mareu.model.usecase.GetSallesUseCase;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * ViewModel Use to Show a list of reunion
+ */
 public class ReunionViewModel extends ViewModel {
     // region repository
 
@@ -62,7 +65,9 @@ public class ReunionViewModel extends ViewModel {
     //Variable
     //----------------------------------------------------
 
-
+    /**
+     * filter for choice a list of reunion to show
+     */
     public enum filter {reset, date, lieu}
 
     private filter filterMain = filter.reset;
@@ -90,23 +95,20 @@ public class ReunionViewModel extends ViewModel {
      * set the list of reunions to show
      */
     public void setReunionWithFilter() {
-        List<Reunion> listToActualise = new ArrayList<>();
+        List<Reunion> listToActualise;
         switch (filterMain) {
             case reset:
                 listToActualise = getReunionsUseCase.getReunions();
-                //reunions.setValue(reunionRepository.getReunions());
                 break;
             case date:
                 listToActualise = filterReunionByDateUseCase.filterReunionByDate(calendarFilter);
-                //reunions.setValue(reunionRepository.getReunionFilterByDate(calendarFilter,listToFilter));
                 break;
             case lieu:
                 listToActualise = filterReunionByVenueUseCase.filterReunionBySalle(salleFilter);
-                //reunions.setValue(reunionRepository.getReunionFilterByVenue(salleFilter,listToFilter));
                 break;
 
             default:
-                //reunions.setValue(reunionRepository.getReunions());
+                listToActualise = getReunionsUseCase.getReunions();
         }
         reunions.setValue(listToActualise);
     }
@@ -120,7 +122,7 @@ public class ReunionViewModel extends ViewModel {
      *
      * @param reunion reunion to delete
      */
-    public void deleteReunion(Reunion reunion, int position) {
+    public void deleteReunion(Reunion reunion) {
         //if the reunion is delete
         if (deleteReunionUseCase.deleteReunion(reunion)) {
             setReunionWithFilter();
@@ -136,15 +138,15 @@ public class ReunionViewModel extends ViewModel {
      * @return String with all of email
      */
     public String listOfEmailInString(Reunion reunion) {
-        String listofEmail = null;
+        StringBuilder listofEmail = null;
         for (String Email : reunion.getEmail_Person()) {
             if (listofEmail == null) {
-                listofEmail = Email;
+                listofEmail = new StringBuilder(Email);
             } else {
-                listofEmail += ", " + Email;
+                listofEmail.append(", ").append(Email);
             }
         }
-        return listofEmail;
+        return Objects.requireNonNull(listofEmail).toString();
     }
 
     /**
@@ -218,7 +220,7 @@ public class ReunionViewModel extends ViewModel {
         SubMenu subMenu = parentItem.getSubMenu();
 
         //add all of Salle in Submenu
-        if (subMenu.size() < 1) {
+        if (Objects.requireNonNull(subMenu).size() < 1) {
             List<Salle> listSalle = getSallesUseCase.getSalles();
             for (int i = 0; listSalle.size() > i; i++) {
                 subMenu.add(0, 100 + i, i, listSalle.get(i).getLieu());

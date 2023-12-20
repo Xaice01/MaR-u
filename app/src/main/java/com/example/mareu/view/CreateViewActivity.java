@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +18,9 @@ import com.example.mareu.viewmodel.CreateViewModel;
 import java.util.Calendar;
 import java.util.Objects;
 
+/**
+ * CreateViewActivity for create a new Reunion
+ */
 public class CreateViewActivity extends AppCompatActivity {
 
     private ActivityCreateViewBinding binding;
@@ -36,6 +40,7 @@ public class CreateViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,10 +111,10 @@ public class CreateViewActivity extends AppCompatActivity {
     //Check if one of textfield is empty and write a error message
     private boolean checkIfTextIsEmpty() {
         boolean check = false;
-        String reunion = binding.textInputNomReunion.getText().toString();
-        String date = binding.textInputDate.getText().toString();
-        String dureeStart = binding.textInputDureeStart.getText().toString();
-        String dureeEnd = binding.textInputDureeEnd.getText().toString();
+        String reunion = Objects.requireNonNull(binding.textInputNomReunion.getText()).toString();
+        String date = Objects.requireNonNull(binding.textInputDate.getText()).toString();
+        String dureeStart = Objects.requireNonNull(binding.textInputDureeStart.getText()).toString();
+        String dureeEnd = Objects.requireNonNull(binding.textInputDureeEnd.getText()).toString();
         String salleDeReunion = binding.autoCompleteSalleReunion.getText().toString();
         String participant = binding.displayTextViewEmailList.getText().toString();
 
@@ -140,6 +145,5 @@ public class CreateViewActivity extends AppCompatActivity {
 
         return check;
     }
-
 
 }

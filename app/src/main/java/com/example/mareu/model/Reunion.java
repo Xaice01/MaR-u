@@ -1,6 +1,5 @@
 package com.example.mareu.model;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -44,12 +43,12 @@ public class Reunion {
     /**
      * Constructor
      *
-     * @param id
-     * @param name
-     * @param date
-     * @param duration
-     * @param venue
-     * @param email_Person
+     * @param id           id of the Reunion
+     * @param name         name of the Reunion
+     * @param date         date of the Reunion
+     * @param duration     duration of the Reunion
+     * @param venue        Salle of the Reunion
+     * @param email_Person List of people in the Reunion
      */
     public Reunion(Long id, String name, Calendar date, long duration, Salle venue, List<String> email_Person) {
         this.id = id;

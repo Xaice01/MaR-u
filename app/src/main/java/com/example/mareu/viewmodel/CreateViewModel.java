@@ -17,6 +17,9 @@ import com.example.mareu.model.service.DummyReunionApiService;
 import com.example.mareu.model.service.DummySalleApiService;
 import com.example.mareu.model.service.ReunionApiService;
 import com.example.mareu.model.service.SalleApiService;
+import com.example.mareu.model.usecase.CreateReunionUseCase;
+import com.example.mareu.model.usecase.GetIdForNewReunionUseCase;
+import com.example.mareu.model.usecase.GetSalleAvailableUseCase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +27,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * ViewModel Use to Create Reunion
+ */
 public class CreateViewModel extends ViewModel {
 
     //----------------------------------------------------
@@ -32,12 +38,17 @@ public class CreateViewModel extends ViewModel {
 
     //injection de dépendance Data:DummyReunionApiService()
     private final ReunionApiService reunionApiService = new DummyReunionApiService();
-    private ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
+    private final ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
 
 
     //injection de dépendance Data:DummySalleApiService()
     private final SalleApiService salleApiService = new DummySalleApiService();
-    private SalleRepository salleRepository = SalleRepository.getInstance(salleApiService);
+    private final SalleRepository salleRepository = SalleRepository.getInstance(salleApiService);
+
+    private final CreateReunionUseCase createReunionUseCase = new CreateReunionUseCase(reunionRepository);
+
+    private final GetIdForNewReunionUseCase getIdForNewReunionUseCase = new GetIdForNewReunionUseCase(reunionRepository);
+    private final GetSalleAvailableUseCase getSalleAvailableUseCase = new GetSalleAvailableUseCase(reunionRepository, salleRepository);
 
     //----------------------------------------------------
     //Create View
@@ -55,11 +66,15 @@ public class CreateViewModel extends ViewModel {
     public MutableLiveData<ArrayAdapter<String>> listOfSalleAvailaibleAdapterItems = new MutableLiveData<>();
     public MutableLiveData<ArrayList<String>> listOfParticipant = new MutableLiveData<>();
 
-    private MutableLiveData<List<Salle>> salles = new MutableLiveData<>();
+    private final MutableLiveData<List<Salle>> salles = new MutableLiveData<>();
 
     //----------------------------------------------------
     //Variable
     //----------------------------------------------------
+
+    /**
+     * ChoiceTime use for TimePicker for select hour of the start of Reunion or hour of the end of reunion
+     */
     public enum ChoiceTime {start, end}
 
     int duration;
@@ -89,53 +104,7 @@ public class CreateViewModel extends ViewModel {
      * @param reunion reunion to create
      */
     public void createReunion(Reunion reunion) {
-        reunionRepository.createReunion(reunion);
-    }
-
-    /**
-     * Get id for new reunion
-     *
-     * @return id next Id available
-     */
-    public long getIdForNewReunion() {
-        int sizeOfReunions;
-        sizeOfReunions = reunionRepository.getReunions().size();
-        return reunionRepository.getReunions().get(sizeOfReunions - 1).getId() + 1;
-    }
-
-    /**
-     * get list of Salle available
-     *
-     * @param calendar      the date and hour of Reunion
-     * @param dureeToMinute duration of Reunion
-     */
-    public List<String> getSalleAvailable(Calendar calendar, int dureeToMinute) {
-        inisialisation();
-        List<String> listSalle = new ArrayList<>();
-        for (Salle salle : salles.getValue()) {
-            listSalle.add(salle.getLieu());
-        }
-
-        Calendar calendarEnd = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
-
-        calendarEnd.add(Calendar.MINUTE, dureeToMinute);
-        List<Reunion> reunion_To_Compare = new ArrayList<>(reunionRepository.getReunions());
-        for (Reunion reunion : reunion_To_Compare) {
-            Calendar endOfReunion = new GregorianCalendar(reunion.getDate().get(Calendar.YEAR), reunion.getDate().get(Calendar.MONTH), reunion.getDate().get(Calendar.DAY_OF_MONTH), reunion.getDate().get(Calendar.HOUR_OF_DAY), reunion.getDate().get(Calendar.MINUTE), reunion.getDate().get(Calendar.SECOND));
-
-            endOfReunion.add(Calendar.MINUTE, (int) reunion.getDuration());
-
-            //calcul if a reunion is created on a other Reunion
-            if ((reunion.getDate().after(calendar) & reunion.getDate().before(calendarEnd)) || reunion.getDate().equals(calendar) || (reunion.getDate().before(calendar) & endOfReunion.after(calendar))) {
-                if (listSalle.contains(reunion.getVenue().getLieu()))
-                    listSalle.remove(reunion.getVenue().getLieu());
-            }
-
-            if (listSalle.isEmpty()) {
-                listSalle.add("No Salle Available");
-            }
-        }
-        return listSalle;
+        createReunionUseCase.createReunion(reunion);
     }
 
     /**
@@ -146,7 +115,7 @@ public class CreateViewModel extends ViewModel {
      */
     public Salle getSalleWithString(String nameOfSalle) {
         Salle salleToReturn = null;
-        for (Salle salle : salles.getValue()) {
+        for (Salle salle : Objects.requireNonNull(salles.getValue())) {
             if (Objects.equals(salle.getLieu(), nameOfSalle)) {
                 salleToReturn = salle;
             }
@@ -218,7 +187,7 @@ public class CreateViewModel extends ViewModel {
     //initialize the list of Venue available
     private void initializeSalleReunion(Context context) {
         Calendar calendar = (Calendar) new GregorianCalendar(selectYearToCreate, selectMonthToCreate, selectDayToCreate, selectHourToCreate, selectMinuteToCreate, 0);
-        listOfSalleAvailaibleAdapterItems.setValue(new ArrayAdapter<>(context, R.layout.item_list_salle, getSalleAvailable(calendar, duration)));
+        listOfSalleAvailaibleAdapterItems.setValue(new ArrayAdapter<>(context, R.layout.item_list_salle, getSalleAvailableUseCase.getSalleAvailable(calendar, duration)));
     }
 
     /**
@@ -255,7 +224,7 @@ public class CreateViewModel extends ViewModel {
      */
     public void addToListOfParticipant(String email) {
         ArrayList<String> listOfEmail = listOfParticipant.getValue();
-        listOfEmail.add(email);
+        Objects.requireNonNull(listOfEmail).add(email);
         listOfParticipant.setValue(listOfEmail);
     }
 
@@ -286,7 +255,7 @@ public class CreateViewModel extends ViewModel {
      */
     public void createReunion(String nameOfReunion, String nameOfSalle) {
         Calendar calendar = new GregorianCalendar(selectYearToCreate, selectMonthToCreate, selectDayToCreate, selectHourToCreate, selectMinuteToCreate, 0);
-        Reunion reunion = new Reunion(getIdForNewReunion(), nameOfReunion, calendar, duration, getSalleWithString(nameOfSalle), listOfParticipant.getValue());
+        Reunion reunion = new Reunion(getIdForNewReunionUseCase.getIdForNewReunion(), nameOfReunion, calendar, duration, getSalleWithString(nameOfSalle), listOfParticipant.getValue());
         createReunion(reunion);
     }
 }

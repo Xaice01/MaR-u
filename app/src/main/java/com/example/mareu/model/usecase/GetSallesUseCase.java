@@ -5,7 +5,9 @@ import com.example.mareu.model.repository.SalleRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Use case get list of all Salle
+ */
 public class GetSallesUseCase {
     private final SalleRepository repository;
 
@@ -15,6 +17,5 @@ public class GetSallesUseCase {
 
     public List<Salle> getSalles() {
         return new ArrayList<>(repository.getSalles());
-
     }
 }

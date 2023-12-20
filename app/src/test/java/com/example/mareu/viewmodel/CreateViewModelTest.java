@@ -5,10 +5,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import com.example.mareu.model.Reunion;
 import com.example.mareu.model.Salle;
 import com.example.mareu.model.repository.ReunionRepository;
+import com.example.mareu.model.repository.SalleRepository;
 import com.example.mareu.model.service.DummyReunionApiService;
 import com.example.mareu.model.service.DummySalleApiService;
 import com.example.mareu.model.service.ReunionApiService;
 import com.example.mareu.model.service.SalleApiService;
+import com.example.mareu.model.usecase.GetIdForNewReunionUseCase;
+import com.example.mareu.model.usecase.GetSalleAvailableUseCase;
 
 import junit.framework.TestCase;
 
@@ -22,7 +25,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 
+/**
+ * local unit test, which will execute on the development machine (host).
+ * test CreateViewModel
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class CreateViewModelTest extends TestCase {
     @Rule
@@ -30,11 +38,12 @@ public class CreateViewModelTest extends TestCase {
 
 
     private final ReunionApiService reunionApiService = new DummyReunionApiService();
-    private ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
+    private final ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
 
     private final SalleApiService salleApiService = new DummySalleApiService();
+    private final SalleRepository salleRepository = SalleRepository.getInstance(salleApiService);
 
-    private CreateViewModel createViewModel = new CreateViewModel();
+    private final CreateViewModel createViewModel = new CreateViewModel();
 
     @Test
     public void testGetIdForNewReunion() {
@@ -44,10 +53,10 @@ public class CreateViewModelTest extends TestCase {
 
 
         // When
-        int idExpected = (int) (lastId + 1);
+        long idExpected = lastId + 1;
 
         // Then
-        assertEquals(createViewModel.getIdForNewReunion(), idExpected);
+        assertEquals(new GetIdForNewReunionUseCase(reunionRepository).getIdForNewReunion(), idExpected);
     }
 
     @Test
@@ -83,7 +92,7 @@ public class CreateViewModelTest extends TestCase {
             listOfSalleAvailabeInString.add(salle.getLieu());
         }
 
-        List<String> listToCompare = createViewModel.getSalleAvailable(calendarTimeOfReunion, duration);
+        List<String> listToCompare = new GetSalleAvailableUseCase(reunionRepository, salleRepository).getSalleAvailable(calendarTimeOfReunion, duration);
 
         //Then
         assertEquals(listOfSalleAvailabeInString, listToCompare);
@@ -112,7 +121,7 @@ public class CreateViewModelTest extends TestCase {
 
         // When
         createViewModel.addToListOfParticipant(email);
-        String emailToCompar = createViewModel.listOfParticipant.getValue().get(0);
+        String emailToCompar = Objects.requireNonNull(createViewModel.listOfParticipant.getValue()).get(0);
 
         // Then
         assertEquals(email, emailToCompar);

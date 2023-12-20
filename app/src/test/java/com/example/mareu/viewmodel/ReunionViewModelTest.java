@@ -12,6 +12,8 @@ import com.example.mareu.model.service.DummyReunionApiService;
 import com.example.mareu.model.service.DummySalleApiService;
 import com.example.mareu.model.service.ReunionApiService;
 import com.example.mareu.model.service.SalleApiService;
+import com.example.mareu.model.usecase.FilterReunionByDateUseCase;
+import com.example.mareu.model.usecase.FilterReunionByVenueUseCase;
 
 import junit.framework.TestCase;
 
@@ -25,6 +27,10 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * local unit test, which will execute on the development machine (host).
+ * test ReunionViewModel
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ReunionViewModelTest extends TestCase {
     @Rule
@@ -37,11 +43,11 @@ public class ReunionViewModelTest extends TestCase {
     private Observer<List<Salle>> salleObserver;
 
     private final ReunionApiService reunionApiService = new DummyReunionApiService();
-    private ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
+    private final ReunionRepository reunionRepository = ReunionRepository.getInstance(reunionApiService);
 
     private final SalleApiService salleApiService = new DummySalleApiService();
 
-    private ReunionViewModel reunionViewModel = new ReunionViewModel();
+    private final ReunionViewModel reunionViewModel = new ReunionViewModel();
 
 
     @Test
@@ -60,9 +66,8 @@ public class ReunionViewModelTest extends TestCase {
     @Test
     public void testGetReunionsByDate() {
         // Given
-        List<Reunion> listToFilter = reunionViewModel.getReunions().getValue();
         Calendar calendar = new GregorianCalendar(2017, 0, 25, 0, 0, 0);
-        List<Reunion> reunions = reunionApiService.getReunionFilterByDate(calendar, listToFilter);
+        List<Reunion> reunions = new FilterReunionByDateUseCase(reunionRepository).filterReunionByDate(calendar);
 
         // When
         reunionViewModel.getReunionsByDate(calendar).observeForever(reunionObserver);
@@ -75,9 +80,8 @@ public class ReunionViewModelTest extends TestCase {
     @Test
     public void testGetReunionsByLieu() {
         // Given
-        List<Reunion> listToFilter = reunionViewModel.getReunions().getValue();
         Salle salle = new Salle("Mario", 10);
-        List<Reunion> reunions = reunionRepository.getReunionFilterByVenue(salle, listToFilter);
+        List<Reunion> reunions = new FilterReunionByVenueUseCase(reunionRepository).filterReunionBySalle(salle);
 
         // When
         reunionViewModel.getReunionsByLieu(salle).observeForever(reunionObserver);
@@ -95,7 +99,7 @@ public class ReunionViewModelTest extends TestCase {
 
         // When
         assertTrue(reunionViewModel.getReunions().getValue().contains(reunionToDelete));
-        reunionViewModel.deleteReunion(reunionToDelete, position);
+        reunionViewModel.deleteReunion(reunionToDelete);
 
         // Then
         assertFalse(reunionViewModel.getReunions().getValue().contains(reunionToDelete));
@@ -113,20 +117,6 @@ public class ReunionViewModelTest extends TestCase {
         // Then
         verify(salleObserver).onChanged(salles);
         reunionViewModel.getSalles().removeObserver(salleObserver);
-    }
-
-    @Test
-    public void testGetDeletePosition() {
-        // Given
-        int position = 1;
-        Reunion reunionToDelete = reunionViewModel.getReunions().getValue().get(position);
-
-        // When
-        reunionViewModel.deleteReunion(reunionToDelete, position);
-        int positionToCompare = reunionViewModel.getDeletePosition().getValue();
-
-        // Then
-        assertEquals(position, positionToCompare);
     }
 
 }

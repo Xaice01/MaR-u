@@ -1,13 +1,14 @@
 package com.example.mareu.model.usecase;
 
 import com.example.mareu.model.Reunion;
-import com.example.mareu.model.Salle;
 import com.example.mareu.model.repository.ReunionRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
+/**
+ * Use Case for Filter Reunion By Date
+ */
 public class FilterReunionByDateUseCase {
 
     private final ReunionRepository repository;

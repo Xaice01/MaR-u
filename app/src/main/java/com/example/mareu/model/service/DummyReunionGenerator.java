@@ -8,7 +8,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-
+/**
+ * Generator
+ * List of Reunion
+ */
 public abstract class DummyReunionGenerator {
     /**
      * Generator

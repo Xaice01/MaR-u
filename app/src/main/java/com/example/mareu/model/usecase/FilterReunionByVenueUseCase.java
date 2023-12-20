@@ -6,7 +6,9 @@ import com.example.mareu.model.repository.ReunionRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Use Case for Filter Reunion By Salle
+ */
 public class FilterReunionByVenueUseCase {
 
     private final ReunionRepository repository;

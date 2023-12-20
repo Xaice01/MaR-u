@@ -15,7 +15,9 @@ import com.example.mareu.R;
 import com.example.mareu.model.Reunion;
 
 import java.util.Objects;
-
+/**
+ * Adapter for the recycler View of MainActivity
+ */
 
 public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> {
 
@@ -27,13 +29,14 @@ public class ReunionListAdapter extends ListAdapter<Reunion, ReunionViewHolder> 
      * for the delete reunion
      */
     public interface Listener {
-        void onClickDelete(Reunion reunion, int position);
+        void onClickDelete(Reunion reunion);
     }
 
     public ReunionListAdapter(Listener callback) {
         super(DIFF_CALLBACK);
         this.callback = callback;
     }
+
 
     @Override
     public ReunionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

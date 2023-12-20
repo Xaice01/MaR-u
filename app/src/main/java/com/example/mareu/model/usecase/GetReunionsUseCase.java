@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Get all of Reunions
+ * Use case get all of Reunions
  */
 public class GetReunionsUseCase {
     private final ReunionRepository repository;
