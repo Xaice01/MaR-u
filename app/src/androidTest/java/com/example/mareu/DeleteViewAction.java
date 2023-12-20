@@ -6,7 +6,9 @@ import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 
 import org.hamcrest.Matcher;
-
+/**
+ * for the Instrumented test
+ */
 public class DeleteViewAction implements ViewAction {
     @Override
     public Matcher<View> getConstraints() {

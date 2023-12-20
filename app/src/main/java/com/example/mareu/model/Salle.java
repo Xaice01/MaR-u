@@ -1,7 +1,9 @@
 package com.example.mareu.model;
 
 import java.util.Objects;
-
+/**
+ * Model object representing a Salle
+ */
 public class Salle {
     /**
      * venue

@@ -18,14 +18,14 @@ public interface SalleApiService {
     /**
      * Create venue
      *
-     * @param salle
+     * @param salle Salle to Create
      */
     void createSalle(Salle salle);
 
     /**
      * delete venue
      *
-     * @param salle
+     * @param salle Salle to Delete
      */
     void deleteSalle(Salle salle);
 }

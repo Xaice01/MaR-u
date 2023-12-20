@@ -1,5 +1,6 @@
 package com.example.mareu;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -19,10 +20,10 @@ import com.example.mareu.view.CreateViewActivity;
 import com.example.mareu.view.ReunionListAdapter;
 import com.example.mareu.viewmodel.ReunionViewModel;
 
-
+/**
+ * MainActivity show the list of reunion
+ */
 public class MainActivity extends AppCompatActivity implements ReunionListAdapter.Listener {
-
-    private ActivityMainBinding binding;
 
     private ReunionViewModel reunionViewModel;
     private ReunionListAdapter listAdapter;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        com.example.mareu.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
@@ -41,10 +42,8 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
 
         //configure reunionViewModel
         reunionViewModel = new ViewModelProvider(this).get(ReunionViewModel.class);
+        reunionViewModel.init();
         reunionViewModel.getReunions().observe(this, list -> listAdapter.submitList(list));
-        //for the delete of item
-        reunionViewModel.getDeletePosition().observe(this, position -> listAdapter.notifyItemRemoved(position));
-
 
         //configure RecyclerView
         recyclerView = binding.listReunionRecyclerview;
@@ -81,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
      * @return true
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         //createMenu and Submenu
         reunionViewModel.selectedMenu(item, this);
         return super.onOptionsItemSelected(item);
@@ -90,12 +89,11 @@ public class MainActivity extends AppCompatActivity implements ReunionListAdapte
     /**
      * for the delete Reunion
      *
-     * @param reunion  reunion to delete
-     * @param position position of this reunion
+     * @param reunion reunion to delete
      */
     @Override
-    public void onClickDelete(Reunion reunion, int position) {
-        reunionViewModel.deleteReunion(reunion, position);
+    public void onClickDelete(Reunion reunion) {
+        reunionViewModel.deleteReunion(reunion);
     }
 
 }

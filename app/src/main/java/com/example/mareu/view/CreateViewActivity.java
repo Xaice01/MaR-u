@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,15 +13,18 @@ import android.widget.Toast;
 
 import com.example.mareu.MainActivity;
 import com.example.mareu.databinding.ActivityCreateViewBinding;
-import com.example.mareu.viewmodel.ReunionViewModel;
+import com.example.mareu.viewmodel.CreateViewModel;
 
 import java.util.Calendar;
 import java.util.Objects;
 
+/**
+ * CreateViewActivity for create a new Reunion
+ */
 public class CreateViewActivity extends AppCompatActivity {
 
     private ActivityCreateViewBinding binding;
-    private ReunionViewModel reunionViewModel;
+    private CreateViewModel createViewModel;
 
 
     //Create toolbar
@@ -36,6 +40,7 @@ public class CreateViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,43 +51,43 @@ public class CreateViewActivity extends AppCompatActivity {
 
 
         //configure reunionViewModel
-        reunionViewModel = new ViewModelProvider(this).get(ReunionViewModel.class);
-        reunionViewModel.init();
+        createViewModel = new ViewModelProvider(this).get(CreateViewModel.class);
+        createViewModel.inisialisation();
 
 
         //for change the text of the Date
-        reunionViewModel.datePick.observe(this, calendar -> binding.textInputDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR)));
+        createViewModel.datePick.observe(this, calendar -> binding.textInputDate.setText(calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR)));
 
         //for change the text of time to start
-        reunionViewModel.hourStart.observe(this, calendar -> binding.textInputDureeStart.setText(calendar.get(Calendar.HOUR_OF_DAY) + "H" + calendar.get(Calendar.MINUTE)));
+        createViewModel.hourStart.observe(this, calendar -> binding.textInputDureeStart.setText(calendar.get(Calendar.HOUR_OF_DAY) + "H" + calendar.get(Calendar.MINUTE)));
 
         //for change the text of time to end
-        reunionViewModel.hourEnd.observe(this, calendar -> binding.textInputDureeEnd.setText(calendar.get(Calendar.HOUR_OF_DAY) + "H" + calendar.get(Calendar.MINUTE)));
+        createViewModel.hourEnd.observe(this, calendar -> binding.textInputDureeEnd.setText(calendar.get(Calendar.HOUR_OF_DAY) + "H" + calendar.get(Calendar.MINUTE)));
 
         //for change and create the list of salle available
-        reunionViewModel.listOfSalleAvailaibleAdapterItems.observe(this, stringArrayAdapter -> binding.autoCompleteSalleReunion.setAdapter(stringArrayAdapter));
+        createViewModel.listOfSalleAvailaibleAdapterItems.observe(this, stringArrayAdapter -> binding.autoCompleteSalleReunion.setAdapter(stringArrayAdapter));
 
         //for change the list of email
-        reunionViewModel.listOfParticipant.observe(this, strings -> binding.displayTextViewEmailList.setText(reunionViewModel.listOfEmailToShow(strings)));
+        createViewModel.listOfParticipant.observe(this, strings -> binding.displayTextViewEmailList.setText(createViewModel.listOfEmailToShow(strings)));
 
         binding.textInputDate.setOnClickListener(v -> {
             //get Date
-            reunionViewModel.datePickerCreateView(this, ReunionViewModel.ListChoiceDatePicker.create);
+            createViewModel.datePickerCreateView(this);
         });
 
         binding.textInputDureeStart.setOnClickListener(v -> {
             //get hour start
-            reunionViewModel.timePickerStart(this);
+            createViewModel.timePickerStart(this);
         });
 
         binding.textInputDureeEnd.setOnClickListener(v -> {
             //get hour finish
-            reunionViewModel.timePickerEnd(this);
+            createViewModel.timePickerEnd(this);
         });
         //get email of participant
         binding.textInputEmail.setOnClickListener(v -> {
             if (!String.valueOf(binding.textInputEmail.getText()).isEmpty()) {
-                reunionViewModel.addToListOfParticipant(String.valueOf(binding.textInputEmail.getText()));
+                createViewModel.addToListOfParticipant(String.valueOf(binding.textInputEmail.getText()));
                 binding.textInputEmail.setText("");
             }
         });
@@ -91,7 +96,7 @@ public class CreateViewActivity extends AppCompatActivity {
         binding.buttonCreateReunion.setOnClickListener(v -> {
             if (!checkIfTextIsEmpty()) {
                 //create reunion
-                reunionViewModel.createReunion(String.valueOf(binding.textInputNomReunion.getText()), String.valueOf(binding.autoCompleteSalleReunion.getText()));
+                createViewModel.createReunion(String.valueOf(binding.textInputNomReunion.getText()), String.valueOf(binding.autoCompleteSalleReunion.getText()));
 
                 Toast.makeText(getApplicationContext(), "created Reunion", Toast.LENGTH_SHORT).show();
 
@@ -106,10 +111,10 @@ public class CreateViewActivity extends AppCompatActivity {
     //Check if one of textfield is empty and write a error message
     private boolean checkIfTextIsEmpty() {
         boolean check = false;
-        String reunion = binding.textInputNomReunion.getText().toString();
-        String date = binding.textInputDate.getText().toString();
-        String dureeStart = binding.textInputDureeStart.getText().toString();
-        String dureeEnd = binding.textInputDureeEnd.getText().toString();
+        String reunion = Objects.requireNonNull(binding.textInputNomReunion.getText()).toString();
+        String date = Objects.requireNonNull(binding.textInputDate.getText()).toString();
+        String dureeStart = Objects.requireNonNull(binding.textInputDureeStart.getText()).toString();
+        String dureeEnd = Objects.requireNonNull(binding.textInputDureeEnd.getText()).toString();
         String salleDeReunion = binding.autoCompleteSalleReunion.getText().toString();
         String participant = binding.displayTextViewEmailList.getText().toString();
 
@@ -140,6 +145,5 @@ public class CreateViewActivity extends AppCompatActivity {
 
         return check;
     }
-
 
 }
