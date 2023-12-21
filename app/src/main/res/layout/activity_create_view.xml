@@ -172,6 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:text="@string/Create_Reunion"
+            android:contentDescription="@string/Create_Reunion"
             app:layout_constraintEnd_toEndOf="@+id/outlinedTextField_Email"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/outlinedTextField_Email"
