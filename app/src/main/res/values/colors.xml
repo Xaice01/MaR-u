@@ -5,4 +5,5 @@
     <color name="colorPrimary">#4F93DF</color>
     <color name="colorPrimaryDark">#407BBD</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="colorCircle">#17A4A6</color>
 </resources>

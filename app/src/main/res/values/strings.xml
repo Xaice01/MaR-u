@@ -12,6 +12,7 @@
     <string name="Add_Reunion">Ajoute une Réunion</string>
     <string name="Error_Name_of_Reunion">entrez un nom de reunion</string>
     <string name="descriptionautoComplete_Salle_Reunion">liste de reunion a choisir</string>
+    <string name="delete">supprimer la réunion</string>
     <!-- item menu (menu.XML)-->
     <string name="Filter_by_date">Filtrer par date</string>
     <string name="Filter_by_Venue">Filtrer par lieu</string>

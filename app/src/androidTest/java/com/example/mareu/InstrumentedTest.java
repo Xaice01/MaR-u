@@ -13,6 +13,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +26,8 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.UiDevice;
 
 import org.hamcrest.Description;
@@ -36,9 +38,6 @@ import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -131,7 +130,7 @@ public class InstrumentedTest {
         textView.check(doesNotExist());
     }
 
-    // Création d'une réunion vérification si la réunion est créée dans les liste
+    // Création d'une réunion vérification si la réunion est créé dans les listes
     @Test
     public void createReunionTest() {
         ViewInteraction floatingActionButton = onView(allOf(withId(R.id.floatingActionButton_AddReunion), withContentDescription("Ajoute une Réunion"), childAtPosition(childAtPosition(withId(android.R.id.content), 0), 1), isDisplayed()));
@@ -190,9 +189,203 @@ public class InstrumentedTest {
         ViewInteraction materialButton4 = onView(allOf(withId(R.id.button_CreateReunion), withText("Créer la Reunion"), childAtPosition(allOf(withId(R.id.constraintLayout_CreateReunion), childAtPosition(withClassName(is("androidx.core.widget.NestedScrollView")), 0)), 7), isDisplayed()));
         materialButton4.perform(click());
 
+        ViewInteraction overflowMenuButton = onView(allOf(withContentDescription("More options"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.action_bar), 1), 0), isDisplayed()));
+        overflowMenuButton.perform(click());
+
+        ViewInteraction appCompatTextView = onView(allOf(withId(androidx.core.R.id.title), withText("Filtrer par lieu"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView.perform(click());
+
+        ViewInteraction appCompatTextView2 = onView(allOf(withId(androidx.core.R.id.title), withText("Mario"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView2.perform(click());
+
         //test
         ViewInteraction textView = onView(allOf(withId(R.id.item_list_name), withText("ReunionTest - 15H0 - Mario"), withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))), isDisplayed()));
         textView.check(matches(withText("ReunionTest - 15H0 - Mario")));
+    }
+
+    //Création une réunion test du filtre salle
+    @Test
+    public void filtreWithSalleTest() {
+
+        ViewInteraction overflowMenuButton = onView(allOf(withContentDescription("More options"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.action_bar), 1), 0), isDisplayed()));
+        overflowMenuButton.perform(click());
+
+        ViewInteraction appCompatTextView4 = onView(allOf(withId(androidx.core.R.id.title), withText("Filtrer par lieu"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView4.perform(click());
+
+        ViewInteraction appCompatTextView5 = onView(allOf(withId(androidx.core.R.id.title), withText("Daisy"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView5.perform(click());
+
+        //test
+        ViewInteraction textView = onView(allOf(withId(R.id.item_list_name), withText("ReunionTest - 15H0 - Daisy"), withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))), isDisplayed()));
+        textView.check(doesNotExist());
+
+
+        ViewInteraction floatingActionButton = onView(allOf(withId(R.id.floatingActionButton_AddReunion), withContentDescription("Ajoute une Réunion"), childAtPosition(childAtPosition(withId(android.R.id.content), 0), 1), isDisplayed()));
+        floatingActionButton.perform(click());
+
+        ViewInteraction textInputEditText = onView(allOf(withId(R.id.textInput_Nom_Reunion), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Nom_Reunion), 0), 0), isDisplayed()));
+        textInputEditText.perform(replaceText("ReunionTest"), closeSoftKeyboard());
+
+        ViewInteraction textInputEditText2 = onView(allOf(withId(R.id.textInput_Date), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Date), 0), 0), isDisplayed()));
+        textInputEditText2.perform(click());
+
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2023, 12, 13));
+
+
+        ViewInteraction materialButton = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        materialButton.perform(scrollTo(), click());
+
+        ViewInteraction textInputEditText3 = onView(allOf(withId(R.id.textInput_Duree_start), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Duree_start), 0), 0), isDisplayed()));
+        textInputEditText3.perform(click());
+
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(15, 00));
+
+        ViewInteraction materialButton2 = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        materialButton2.perform(scrollTo(), click());
+
+        ViewInteraction textInputEditText4 = onView(allOf(withId(R.id.textInput_Duree_end), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Duree_end), 0), 0), isDisplayed()));
+        textInputEditText4.perform(click());
+
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(15, 30));
+
+        ViewInteraction materialButton3 = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        materialButton3.perform(scrollTo(), click());
+
+        ViewInteraction materialAutoCompleteTextView = onView(allOf(withId(R.id.autoComplete_Salle_Reunion), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Salle_Reunion), 0), 0), isDisplayed()));
+        materialAutoCompleteTextView.perform(click());
+
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        //navigate on autocompletetext
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadUp();
+        device.pressEnter();
+
+
+        ViewInteraction textInputEditText5 = onView(allOf(withId(R.id.textInput_Email), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Email), 0), 0), isDisplayed()));
+        textInputEditText5.perform(replaceText("test@gmail.com"));
+        textInputEditText5.perform(click());
+        textInputEditText5.perform(click());
+
+        textInputEditText5.perform(replaceText("test2@gmail.com"));
+        textInputEditText5.perform(click());
+        textInputEditText5.perform(click(), closeSoftKeyboard());
+
+
+        ViewInteraction materialButton4 = onView(allOf(withId(R.id.button_CreateReunion), withText("Créer la Reunion"), childAtPosition(allOf(withId(R.id.constraintLayout_CreateReunion), childAtPosition(withClassName(is("androidx.core.widget.NestedScrollView")), 0)), 7), isDisplayed()));
+        materialButton4.perform(click());
+
+        overflowMenuButton.perform(click());
+
+        ViewInteraction appCompatTextView = onView(allOf(withId(androidx.core.R.id.title), withText("Filtrer par lieu"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView.perform(click());
+
+        ViewInteraction appCompatTextView2 = onView(allOf(withId(androidx.core.R.id.title), withText("Daisy"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView2.perform(click());
+
+        //test
+        ViewInteraction textView1 = onView(allOf(withId(R.id.item_list_name), withText("ReunionTest - 15H0 - Daisy"), withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))), isDisplayed()));
+        textView1.check(matches(withText("ReunionTest - 15H0 - Daisy")));
+    }
+
+    //creation une reunion test du filtre date
+    @Test
+    public void filtreWithDateTest() {
+
+        ViewInteraction overflowMenuButton = onView(allOf(withContentDescription("More options"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.action_bar), 1), 0), isDisplayed()));
+        overflowMenuButton.perform(click());
+
+        ViewInteraction appCompatTextView = onView(allOf(withId(androidx.transition.R.id.title), withText("Filtrer par date"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView.perform(click());
+
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2023, 3, 24));
+
+        ViewInteraction appCompatButton = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        appCompatButton.perform(scrollTo(), click());
+
+        //test
+        ViewInteraction textView = onView(allOf(withId(R.id.item_list_name), withText("ReunionTest - 15H0 - Peach"), withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))), isDisplayed()));
+        textView.check(doesNotExist());
+
+
+        ViewInteraction floatingActionButton = onView(allOf(withId(R.id.floatingActionButton_AddReunion), withContentDescription("Ajoute une Réunion"), childAtPosition(childAtPosition(withId(android.R.id.content), 0), 1), isDisplayed()));
+        floatingActionButton.perform(click());
+
+        ViewInteraction textInputEditText = onView(allOf(withId(R.id.textInput_Nom_Reunion), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Nom_Reunion), 0), 0), isDisplayed()));
+        textInputEditText.perform(replaceText("ReunionTest"), closeSoftKeyboard());
+
+        ViewInteraction textInputEditText2 = onView(allOf(withId(R.id.textInput_Date), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Date), 0), 0), isDisplayed()));
+        textInputEditText2.perform(click());
+
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2023, 3, 24));
+
+
+        ViewInteraction materialButton = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        materialButton.perform(scrollTo(), click());
+
+        ViewInteraction textInputEditText3 = onView(allOf(withId(R.id.textInput_Duree_start), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Duree_start), 0), 0), isDisplayed()));
+        textInputEditText3.perform(click());
+
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(15, 00));
+
+        ViewInteraction materialButton2 = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        materialButton2.perform(scrollTo(), click());
+
+        ViewInteraction textInputEditText4 = onView(allOf(withId(R.id.textInput_Duree_end), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Duree_end), 0), 0), isDisplayed()));
+        textInputEditText4.perform(click());
+
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(15, 30));
+
+        ViewInteraction materialButton3 = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        materialButton3.perform(scrollTo(), click());
+
+        ViewInteraction materialAutoCompleteTextView = onView(allOf(withId(R.id.autoComplete_Salle_Reunion), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Salle_Reunion), 0), 0), isDisplayed()));
+        materialAutoCompleteTextView.perform(click());
+
+
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        //navigate on autocompletetext
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadUp();
+        device.pressEnter();
+
+
+        ViewInteraction textInputEditText5 = onView(allOf(withId(R.id.textInput_Email), childAtPosition(childAtPosition(withId(R.id.outlinedTextField_Email), 0), 0), isDisplayed()));
+        textInputEditText5.perform(replaceText("test@gmail.com"));
+        textInputEditText5.perform(click());
+        textInputEditText5.perform(click());
+
+        textInputEditText5.perform(replaceText("test2@gmail.com"));
+        textInputEditText5.perform(click());
+        textInputEditText5.perform(click(), closeSoftKeyboard());
+
+
+        ViewInteraction materialButton4 = onView(allOf(withId(R.id.button_CreateReunion), withText("Créer la Reunion"), childAtPosition(allOf(withId(R.id.constraintLayout_CreateReunion), childAtPosition(withClassName(is("androidx.core.widget.NestedScrollView")), 0)), 7), isDisplayed()));
+        materialButton4.perform(click());
+
+        ViewInteraction overflowMenuButton1 = onView(allOf(withContentDescription("More options"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.action_bar), 1), 0), isDisplayed()));
+        overflowMenuButton1.perform(click());
+
+        ViewInteraction appCompatTextView2 = onView(allOf(withId(androidx.transition.R.id.title), withText("Filtrer par date"), childAtPosition(childAtPosition(withId(androidx.appcompat.R.id.content), 0), 0), isDisplayed()));
+        appCompatTextView2.perform(click());
+
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2023, 3, 24));
+
+        ViewInteraction appCompatButton2 = onView(allOf(withId(android.R.id.button1), withText("OK"), childAtPosition(childAtPosition(withClassName(is("android.widget.ScrollView")), 0), 3)));
+        appCompatButton2.perform(scrollTo(), click());
+
+        //test
+        ViewInteraction textView1 = onView(allOf(withId(R.id.item_list_name), withText("ReunionTest - 15H0 - Peach"), withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class))), isDisplayed()));
+        textView1.check(matches(withText("ReunionTest - 15H0 - Peach")));
     }
 
     // Création puis suppression de la réunion
